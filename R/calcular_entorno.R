@@ -29,13 +29,13 @@
 #'                  dim = 50,
 #'                  nombre = "plazas_entorno")
 calcular_entorno <- function(area, objeto, dim, ext, nombre){
-  a = table(st_geometry_type(objeto)) %>% as.data.frame() %>% dplyr::filter(Freq > 0)
+  a = table(st_geometry_type(objeto)) |> as.data.frame() |> dplyr::filter(Freq > 0)
   if(a$Var1 != "POINT" & a$Var1 != "POLYGON" & a$Var1 != "MULTIPOLYGON"){
     stop("Error: El objeto provisto para el cálculo debe tener geometrías de clase 'POINT', 'POLYGON' o 'MULTIPOLYGON'.")
   }
   if(a$Var1 == "POLYGON" | a$Var1 == "MULTIPOLYGON"){
   area <- sf::st_transform(area, 3857)
-  area_aux <- area %>% sf::st_buffer(ext*1.1)
+  area_aux <- area |> sf::st_buffer(ext*1.1)
   objeto <- sf::st_transform(objeto, 3857)
   objeto <- suppressWarnings(sf::st_intersection(objeto, area_aux))
   r <- raster::raster(area_aux, res = dim)
@@ -67,7 +67,7 @@ calcular_entorno <- function(area, objeto, dim, ext, nombre){
   }
  else{
    area <- sf::st_transform(area, 3857)
-   area_aux <- area %>% sf::st_buffer(ext*1.1)
+   area_aux <- area |> sf::st_buffer(ext*1.1)
    objeto <- sf::st_transform(objeto, 3857)
    objeto <- suppressWarnings(sf::st_intersection(objeto, area_aux))
    r <- raster::raster(area_aux, res = dim)

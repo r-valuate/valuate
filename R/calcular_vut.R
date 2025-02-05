@@ -238,7 +238,7 @@ coef <- coef |>
 coef$impacto <- ifelse(coef$tipo == "Numerica", coef$referencia ^ coef$Efecto,
                       ifelse(coef$tipo == "No numerica" & is.na(coef$Efecto) == F,
                              coef$Valor * coef$Efecto, NA))
-primero <- coef %>%
+primero <- coef |>
             dplyr::group_by(Variable, id) |>
             dplyr::filter(tipo == "Numerica") |>
             dplyr::mutate(aux = prod(impacto)) |>
