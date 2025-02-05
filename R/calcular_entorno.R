@@ -13,8 +13,8 @@
 #'
 #' @examples
 #' # Definimos el area de estudio
-#' area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = F)
-#' bbox = sf::st_transform(area_de_estudio, 4326) |> st_bbox(bbox)
+#' area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = FALSE)
+#' bbox = sf::st_transform(area_de_estudio, 4326) |> sf::st_bbox(bbox)
 #'
 #' # Descargamos los parques que se encuentran dentro del area de estudio
 #' plazas <- osmdata::opq(bbox) |>
@@ -29,7 +29,7 @@
 #'                  dim = 50,
 #'                  nombre = "plazas_entorno")
 calcular_entorno <- function(area, objeto, dim, ext, nombre){
-  a = table(st_geometry_type(objeto)) |> as.data.frame() |> dplyr::filter(Freq > 0)
+  a = table(sf::st_geometry_type(objeto)) |> as.data.frame() |> dplyr::filter(Freq > 0)
   if(a$Var1 != "POINT" & a$Var1 != "POLYGON" & a$Var1 != "MULTIPOLYGON"){
     stop("Error: El objeto provisto para el cálculo debe tener geometrías de clase 'POINT', 'POLYGON' o 'MULTIPOLYGON'.")
   }
@@ -47,11 +47,11 @@ calcular_entorno <- function(area, objeto, dim, ext, nombre){
   objeto$aux <- 1
   var <- fasterize::fasterize(objeto, raster::raster(r), field = "aux", fun = "sum")
   var <- terra::project(terra::rast(var), "epsg:3857")
-  var <- terra::ifel(is.na(var), 0, var)
+  var <- terra::ifel(base::is.na(var), 0, var)
   fw <- raster::focalWeight(var, ext, "circle")
   var <- terra::focal(x = var, w = fw, fun = "mean")
   names(var) <- nombre
-  var <- terra::crop(var, st_transform(area, 3857))
+  var <- terra::crop(var, sf::st_transform(area, 3857))
   area <- sf::st_transform(area, 3857)
   r <- raster::raster(area, res = dim)
   r <- fasterize::fasterize(area, r)
@@ -81,10 +81,10 @@ calcular_entorno <- function(area, objeto, dim, ext, nombre){
    var <- terra::project(terra::rast(var), "epsg:3857")
    var <- terra::ifel(is.na(var), 0, var)
    fw <- raster::focalWeight(var, ext, "circle")
-   fw <- replace(fw, fw > 0, 1)
+   fw <- base::replace(fw, fw > 0, 1)
    var <- terra::focal(x = var, w = fw, fun = "sum")
    names(var) <- nombre
-   var <- terra::crop(var, st_transform(area, 3857))
+   var <- terra::crop(var, sf::st_transform(area, 3857))
    area <- sf::st_transform(area, 3857)
    r <- raster::raster(area, res = dim)
    r <- fasterize::fasterize(area, r)

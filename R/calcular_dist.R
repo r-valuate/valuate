@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' # Definimos el area de estudio
-#' area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = F)
+#' area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = FALSE)
 #' bbox = sf::st_transform(area_de_estudio, 4326) |> st_bbox(bbox)
 #'
 #' # Descargamos las vias principales
