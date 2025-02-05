@@ -2,47 +2,45 @@
 % Please edit documentation in R/calcular_vut.R
 \name{calcular_vut}
 \alias{calcular_vut}
-\title{Homogeneización del precio de mercado de los inmuebles}
+\title{Homogeneizacion del precio de mercado de los inmuebles}
 \usage{
 calcular_vut(df, index, dependiente, independientes, dist)
 }
 \arguments{
-\item{df}{Objeto 'sf' con geometría 'POINT'. Muestra georreferenciada con precios de la tierra cuyo valor se pretende expresar en términos homogéneos.}
+\item{df}{Objeto 'sf' con geometria 'POINT'. Muestra georreferenciada con precios de la tierra cuyo valor se pretende expresar en terminos homogeneos.}
 
-\item{index}{Identificador único para cada variable.}
+\item{index}{Identificador unico para cada variable.}
 
 \item{dependiente}{Nombre de la variable dependiente, aquella que contiene el precio por metro cuadrado.}
 
-\item{independientes}{Vector con los nombres de las columnas a utilizarse como variables independientes, y el valor de referencia correspondiente a un "lote típico". Si las variables son numéricas se debe indicar si el ajuste a un lote típico debe tomar como referencia la media o la mediana de dicha variable. En el caso de ser variables categóricas, se debe indicar el nombre de la categoría a tomarse como referencia. Ver ejemplo abajo.}
+\item{independientes}{Vector con los nombres de las columnas a utilizarse como variables independientes, y el valor de referencia correspondiente a un "lote tipico". Si las variables son numericas se debe indicar si el ajuste a un lote tipico debe tomar como referencia la media o la mediana de dicha variable. En el caso de ser variables categoricas, se debe indicar el nombre de la categoria a tomarse como referencia. Ver ejemplo abajo.}
 
-\item{dist}{Distancia que define el vecindario sobre el que se realizará la corrección por dependencia espacial".}
+\item{dist}{Distancia que define el vecindario sobre el que se realizara la correccion por dependencia espacial.}
 }
 \value{
-La función estima el precio por metro cuadrado homogeneizado, siguiendo a Carranza (2024). Toma como input un objeto espacial 'sf' y ajusta coeficientes de corrección según diferentes variables definidas por el usuario para reexpresar el precio en término de un 'lote típico' para el área de estudio. La función devuelve un objetivo llamado "resultado", que consiste en el df original al cual se agrega una columna correspondiente al valor homogeneizado (vut) y otra columna con el coeficiente de homogeneización aplicado (coef). Se informa, además, el parámetro de ajuste estimado por el modelo lineal para cada una de las variables independientes involucradas en el proceso de homogeneización.
+La funcion estima el precio por metro cuadrado homogeneizado, siguiendo a Carranza (2024). Toma como input un objeto espacial 'sf' y ajusta coeficientes de correccion segun diferentes variables definidas por el usuario para reexpresar el precio en termino de un 'lote tipico' para el area de estudio. La funcion devuelve un objeto llamado "resultado", que consiste en el df original al cual se agrega una columna correspondiente al valor homogeneizado (vut) y otra columna con el coeficiente de homogeneizacion aplicado (coef). Se informa, ademas, el parametro de ajuste estimado por el modelo lineal para cada una de las variables independientes involucradas en el proceso de homogeneizacion.
 }
 \description{
-Esta función estima el valor de las obervaciones muestrales expresado en términos homogéneos o comparables.
+Esta funcion estima el valor de las observaciones muestrales expresado en terminos homogeneos o comparables.
 }
 \examples{
 # Cargamos los datos correspondientes a una muestra de 1000 terrenos.
 load("data/terrenos.rda")
 
-# Se define como "lote típico" a aquel que se corresponde a una operación de
+# Se define como "lote tipico" a aquel que se corresponde a una operacion de
 # venta, realizada con escritura, y de una superficie igual a la mediana
 # de los lotes de la ciudad.
 # Se indica que la variable que informa sobre el precio por metro cuadrado
 # es "valor_m2".
 # Se define al vecindario en base a una distancia euclidiana de 500 metros.
 
-calcular_vut(df = datos,
+calcular_vut(df = terrenos,
              index = "id",
              independientes = c("tipo_valor" = "Venta",
                                 "superficie" = "mediana",
                                 "situacion_juridica" = "Con Escritura"),
              dependiente = "valor_m2",
              dist = 500)
-
-
 }
 \author{
 Juan Pablo Carranza

@@ -2,7 +2,7 @@
 % Please edit documentation in R/entrenar_modelo.R
 \name{entrenar_modelo}
 \alias{entrenar_modelo}
-\title{Entrenamiento de modelos y predicción del valor}
+\title{Entrenamiento de modelos y prediccion del valor}
 \usage{
 entrenar_modelo(
   df,
@@ -14,35 +14,35 @@ entrenar_modelo(
 )
 }
 \arguments{
-\item{df}{Dataframe sobre el que se realizará el cálculo. Debe ser un objeto de la librería 'sf' con geometría 'POINT'.}
+\item{df}{Dataframe sobre el que se realizara el calculo. Debe ser un objeto de la libreria 'sf' con geometria 'POINT'.}
 
 \item{dependiente}{Nombre de la variable a estimar o variable dependiente.}
 
-\item{independientes}{Vector con los nombres de los rásters que contienen información sobre las variables independientes, generadas a partir de las funciones calcular_dist(), calcular_raster() o calcular_entorno().}
+\item{independientes}{Vector con los nombres de los rasters que contienen informacion sobre las variables independientes, generadas a partir de las funciones calcular_dist(), calcular_raster() o calcular_entorno().}
 
-\item{modelo}{Nombre del modelo a entrenar. Se corresponde con las abrevaciones previstas en la librería 'caret' (Kuhn, 2008) (ver \link{https://topepo.github.io/caret/train-models-by-tag.html}). El valor por default ("qrf") se corresponde al modelo Quantile Regression Forest (Meinshausen, 2006).}
+\item{modelo}{Nombre del modelo a entrenar. Se corresponde con las abreviaciones previstas en la libreria 'caret' (Kuhn, 2008) (ver \link{https://topepo.github.io/caret/train-models-by-tag.html}). El valor por default ("qrf") se corresponde al modelo Quantile Regression Forest (Meinshausen, 2006).}
 
-\item{umbral}{Valor que define el error máximo permitido en la estimación. La función evalúa la precisión fuera de la muestra mediante un proceso de validación cruzada en 10 grupos. Para cada dato en la muestra se registra el error fuera de la muestra. Si el nivel de error agregado es superior al umbral definido, la función procede a eliminar los datos con un nivel de error mayor o igual al definido por el parámetro 'eliminar' (ver abajo).}
+\item{umbral}{Valor que define el error maximo permitido en la estimacion. La funcion evalua la precision fuera de la muestra mediante un proceso de validacion cruzada en 10 grupos. Para cada dato en la muestra se registra el error fuera de la muestra. Si el nivel de error agregado es superior al umbral definido, la funcion procede a eliminar los datos con un nivel de error mayor o igual al definido por el parametro 'eliminar' (ver abajo).}
 
-\item{eliminar}{Valor que define el nivel de error a partir del cual se depurará la muestra, siembre que el error general de estimación se encuentre por encima del definido por el parámetro 'umbral'.}
+\item{eliminar}{Valor que define el nivel de error a partir del cual se depurara la muestra, siempre que el error general de estimacion se encuentre por encima del definido por el parametro 'umbral'.}
 }
 \value{
-Esta función implementa un flujo completo de entrenamiento, evaluación y ajuste de un modelo supervisado para la estimación de una variable dependiente a partir de un conjunto de variables independientes en formato ráster. Específicamente, está diseñada para trabajar con datos espaciales almacenados en un dataframe con geometría de tipo 'POINT', usando herramientas de las librerías 'sf' y 'terra'.
+Esta funcion implementa un flujo completo de entrenamiento, evaluacion y ajuste de un modelo supervisado para la estimacion de una variable dependiente a partir de un conjunto de variables independientes en formato raster. Especificamente, esta disenada para trabajar con datos espaciales almacenados en un dataframe con geometria de tipo 'POINT', usando herramientas de las librerias 'sf' y 'terra'.
 El proceso se desarrolla en los siguientes pasos principales:
   \enumerate{
-    \item{Preprocesamiento de datos:} Los rásters de las variables independientes se combinan con el dataframe espacial mediante la extracción de valores correspondientes a los puntos de la geometría. Los datos se depuran eliminando filas con valores faltantes.
-    \item{Configuración del modelo:} Se define un modelo a través de la librería 'caret', con soporte para una amplia variedad de algoritmos. El modelo predeterminado es Quantile Regression Forest (QRF), aunque se pueden especificar otros métodos soportados por 'caret'.
-    \item{Entrenamiento iterativo:} La función utiliza validación cruzada de 10 particiones para evaluar el error medio absoluto porcentual (MAPE) fuera de la muestra. Si el MAPE promedio supera el umbral especificado, se eliminan observaciones cuyo MAPE individual sea igual o superior al 40\%, y el modelo se entrena nuevamente con los datos restantes. Este proceso se repite hasta que el MAPE promedio cumpla con el umbral definido.
-    \item{Generación de predicción espacial:} Una vez finalizado el entrenamiento, el modelo entrenado se utiliza para interpolar las predicciones sobre los rásters de entrada, generando un nuevo ráster de salida que se guarda en el directorio de trabajo con el nombre 'vut.tif'.
-    \item{Salida de datos:} La función genera dos conjuntos de datos en el entorno global: \code{datos_utilizados} (datos que cumplieron con el umbral de error) y \code{datos_eliminados} (datos descartados por errores altos).}
-La función está optimizada para aplicaciones que requieren análisis espaciales precisos y está diseñada para integrarse en flujos de trabajo geoespaciales complejos. Además, emplea paralelización para acelerar el proceso de entrenamiento en máquinas con múltiples núcleos.
-El diseño de esta función está orientado a contextos donde es crucial garantizar una alta precisión en la estimación, especialmente en aplicaciones que involucran modelización espacial o análisis urbano. Además, facilita la integración con flujos de trabajo basados en datos geoespaciales mediante las librerías 'sf' y 'raster'.
+    \item{Preprocesamiento de datos:} Los rasters de las variables independientes se combinan con el dataframe espacial mediante la extraccion de valores correspondientes a los puntos de la geometria. Los datos se depuran eliminando filas con valores faltantes.
+    \item{Configuracion del modelo:} Se define un modelo a traves de la libreria 'caret', con soporte para una amplia variedad de algoritmos. El modelo predeterminado es Quantile Regression Forest (QRF), aunque se pueden especificar otros metodos soportados por 'caret'.
+    \item{Entrenamiento iterativo:} La funcion utiliza validacion cruzada de 10 particiones para evaluar el error medio absoluto porcentual (MAPE) fuera de la muestra. Si el MAPE promedio supera el umbral especificado, se eliminan observaciones cuyo MAPE individual sea igual o superior al 40\%, y el modelo se entrena nuevamente con los datos restantes. Este proceso se repite hasta que el MAPE promedio cumpla con el umbral definido.
+    \item{Generacion de prediccion espacial:} Una vez finalizado el entrenamiento, el modelo entrenado se utiliza para interpolar las predicciones sobre los rasters de entrada, generando un nuevo raster de salida que se guarda en el directorio de trabajo con el nombre 'vut.tif'.
+    \item{Salida de datos:} La funcion genera dos conjuntos de datos en el entorno global: \code{datos_utilizados} (datos que cumplieron con el umbral de error) y \code{datos_eliminados} (datos descartados por errores altos).}
+La funcion esta optimizada para aplicaciones que requieren analisis espaciales precisos y esta disenada para integrarse en flujos de trabajo geoespaciales complejos. Ademas, emplea paralelizacion para acelerar el proceso de entrenamiento en maquinas con multiples nucleos.
+El diseno de esta funcion esta orientado a contextos donde es crucial garantizar una alta precision en la estimacion, especialmente en aplicaciones que involucran modelizacion espacial o analisis urbano. Ademas, facilita la integracion con flujos de trabajo basados en datos geoespaciales mediante las librerias 'sf' y 'raster'.
 }
 \description{
-Esta función permite entrenar modelos y cuantificar su error en la predicción del valor de los inmuebles (o cualquier otra variable territorial que se esté analizando).
+Esta funcion permite entrenar modelos y cuantificar su error en la prediccion del valor de los inmuebles (o cualquier otra variable territorial que se este analizando).
 }
 \examples{
-# A continuación se presenta un ejemplo para la Ciudad de Medellín (Colombia), con sólo 500 datos.
+# A continuacion se presenta un ejemplo para la Ciudad de Medellin (Colombia), con solo 500 datos.
 load("data/datos.Rda")
 
 entrenar_modelo(df = dat,
@@ -61,7 +61,6 @@ entrenar_modelo(df = dat,
                                    "data/entorno_hoteles.tif"),
                 modelo = "qrf",
                 umbral = 0.2)
-
 }
 \references{
 Kuhn, M. (2008). "Building Predictive Models in R Using the caret Package".

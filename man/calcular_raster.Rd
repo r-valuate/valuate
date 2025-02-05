@@ -2,26 +2,26 @@
 % Please edit documentation in R/calcular_raster.R
 \name{calcular_raster}
 \alias{calcular_raster}
-\title{Cálculo de variables ráster}
+\title{Calculo de variables raster}
 \usage{
 calcular_raster(raster, area, dim, entorno = 0, nombre)
 }
 \arguments{
-\item{raster}{Ráster original sobre el que se pretende realizar el cálculo.}
+\item{raster}{Raster original sobre el que se pretende realizar el calculo.}
 
-\item{area}{Área sobre la que se desea realizar el cálculo.}
+\item{area}{Area sobre la que se desea realizar el calculo.}
 
-\item{dim}{Tamaño de cada píxel del ráster resultante, en metros.}
+\item{dim}{Tamano de cada pixel del raster resultante, en metros.}
 
-\item{entorno}{Distancia sobre la que se pretende resumir la información del ráster original. Default = 0. En todo otro caso se calcula el promedio de los valores de los píxeles en un área circular con un radio igual a la distancia establecida en este parámetro.}
+\item{entorno}{Distancia sobre la que se pretende resumir la informacion del raster original. Default = 0. En todo otro caso se calcula el promedio de los valores de los pixeles en un area circular con un radio igual a la distancia establecida en este parametro.}
 
-\item{nombre}{Nombre de la variable resultante. El ráster será guardado en el entorno de trabajo con éste nombre y la extensión ".tif".}
+\item{nombre}{Nombre de la variable resultante. El raster sera guardado en el entorno de trabajo con este nombre y la extension ".tif".}
 }
 \value{
-La función permite readecuar las resoluciones y proyecciones de diferentes rásters a las utilizadas en el proyecto. Además, el paŕametro "entorno" permite realizar un cálculo del promedio de la variable bajo análisis en el vecindario definido por el usuario.
+La funcion permite readecuar las resoluciones y proyecciones de diferentes rasters a las utilizadas en el proyecto. Ademas, el parametro "entorno" permite realizar un calculo del promedio de la variable bajo analisis en el vecindario definido por el usuario.
 }
 \description{
-Esta función devuelve un ráster que resume el cálculo realizado a partir de otro ráster, incluyendo fuentes de datos con diferente proyección y resolución espacial.
+Esta funcion devuelve un raster que resume el calculo realizado a partir de otro raster, incluyendo fuentes de datos con diferente proyeccion y resolucion espacial.
 }
 \examples{
 library(terra)
@@ -29,7 +29,6 @@ original = rast("data/edificaciones.tif")
 library(sf)
 area_de_estudio = st_read("data/area.gpkg")
 calcular_raster(original, area_de_estudio, dim = 50, entorno = 100, "prueba_raster")
-
 }
 \author{
 Juan Pablo Carranza

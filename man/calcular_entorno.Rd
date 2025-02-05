@@ -2,39 +2,39 @@
 % Please edit documentation in R/calcular_entorno.R
 \name{calcular_entorno}
 \alias{calcular_entorno}
-\title{Cálculo de variables de entorno}
+\title{Calculo de variables de entorno}
 \usage{
 calcular_entorno(area, objeto, dim, ext, nombre)
 }
 \arguments{
-\item{area}{Polígono que indica el área sobre la cuál se ejecutará el cálculo.}
+\item{area}{Poligono que indica el area sobre la cual se ejecutara el calculo.}
 
-\item{objeto}{Objeto espacial "sf" con geometría del tipo "POLYGON" o "MULTIPOLYGON" sobre el que se calcularán las características del entorno.}
+\item{objeto}{Objeto espacial "sf" con geometria del tipo "POLYGON" o "MULTIPOLYGON" sobre el que se calcularan las caracteristicas del entorno.}
 
-\item{dim}{Tamaño de cada píxel del ráster resultante, en metros.}
+\item{dim}{Tamano de cada pixel del raster resultante, en metros.}
 
-\item{ext}{Extensión del entorno o radio que define el vecindario, en metros lineales.}
+\item{ext}{Extension del entorno o radio que define el vecindario, en metros lineales.}
 
-\item{nombre}{Nombre de la variable resultante. El ráster será guardado en el entorno de trabajo con éste nombre y la extensión ".tif".}
+\item{nombre}{Nombre de la variable resultante. El raster sera guardado en el entorno de trabajo con este nombre y la extension ".tif".}
 }
 \value{
-Cuando se le provee un objeto espacial "sf" con geometría "POLYGON" o "MULTIPOLYGON" la función permite calcular variables independientes que resumen las características del vecindario, indicando la proporción del espacio que se encuentra cubierto por los polígonos de interés. Por ejemplo, permite calcular el porcentaje del vecindario que se encuentra cubierto por plazas o parques. Cuando se le provee un objeto espacial "sf" con geometría "POINT" la función permite calcular variables independientes que resumen las características del vecindario, indicando la cantidad de puntos de interés que se encuentran dentro del entorno definido por el usuario. Por ejemplo, permite calcular la cantidad de negocios u oficinas que se encuentran dentro de un radio de "x" metros de cada píxel.
+Cuando se le provee un objeto espacial "sf" con geometria "POLYGON" o "MULTIPOLYGON" la funcion permite calcular variables independientes que resumen las caracteristicas del vecindario, indicando la proporcion del espacio que se encuentra cubierto por los poligonos de interes. Por ejemplo, permite calcular el porcentaje del vecindario que se encuentra cubierto por plazas o parques. Cuando se le provee un objeto espacial "sf" con geometria "POINT" la funcion permite calcular variables independientes que resumen las caracteristicas del vecindario, indicando la cantidad de puntos de interes que se encuentran dentro del entorno definido por el usuario. Por ejemplo, permite calcular la cantidad de negocios u oficinas que se encuentran dentro de un radio de "x" metros de cada pixel.
 }
 \description{
-Esta función devuelve un ráster que resume las características del vecindario a partir de capas geográficas vectoriales de polígonos o de puntos.
+Esta funcion devuelve un raster que resume las caracteristicas del vecindario a partir de capas geograficas vectoriales de poligonos o de puntos.
 }
 \examples{
-# Definimos el área de estudio
-area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = F)
-bbox = sf::st_transform(area_de_estudio, 4326) |> st_bbox(bbox)
+# Definimos el area de estudio
+area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = FALSE)
+bbox = sf::st_transform(area_de_estudio, 4326) |> sf::st_bbox(bbox)
 
-# Descargamos los parques que se encuentran dentro del área de estudio
+# Descargamos los parques que se encuentran dentro del area de estudio
 plazas <- osmdata::opq(bbox) |>
   osmdata::add_osm_feature(key = "leisure", value = "park") |>
   osmdata::osmdata_sf()
 plazas <- plazas$osm_polygons
 
-# Calculamos un ráster que resume, para cada píxel las características del entorno
+# Calculamos un raster que resume, para cada pixel, las caracteristicas del entorno
 calcular_entorno(area = area_de_estudio,
                  ext = 500,
                  objeto = plazas,

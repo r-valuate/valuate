@@ -2,22 +2,22 @@
 % Please edit documentation in R/simular_escenario.R
 \name{simular_escenario}
 \alias{simular_escenario}
-\title{Simulación de escenarios y estimación de externalidades espaciales}
+\title{Simulacion de escenarios y estimacion de externalidades espaciales}
 \usage{
 simular_escenario(modelo, independientes, original)
 }
 \arguments{
-\item{modelo}{Archivo .rda guardado en el directorio de trabajo por la función estimar_modelo().}
+\item{modelo}{Archivo .rda guardado en el directorio de trabajo por la funcion estimar_modelo().}
 
-\item{independientes}{Vector con los nombres de las variables independientes. Debe tener los mismos nombre que los utilizados en la función estimar_modelo(), sólo que admite que los rásters tengan una distribución espacial diferente, incorporando modificaciones simuladas a la nueva predicción.}
+\item{independientes}{Vector con los nombres de las variables independientes. Debe tener los mismos nombre que los utilizados en la funcion estimar_modelo(), solo que admite que los rasters tengan una distribucion espacial diferente, incorporando modificaciones simuladas a la nueva prediccion.}
 
-\item{original}{Resultado del modelo original. Es un archivo .tif guardado en el directorio de trabajo por la función estimar_modelo().}
+\item{original}{Resultado del modelo original. Es un archivo .tif guardado en el directorio de trabajo por la funcion estimar_modelo().}
 }
 \value{
-La función devuelve un ráster que informa sobre el impacto en la variable dependiente de las simulaciones realizadas en las variables independientes. Permite estimar la magnitud y el alcance territorial de las modificaciones simuladas sobre la variable de estudio.
+La funcion devuelve un raster que informa sobre el impacto en la variable dependiente de las simulaciones realizadas en las variables independientes. Permite estimar la magnitud y el alcance territorial de las modificaciones simuladas sobre la variable de estudio.
 }
 \description{
-A partir de la predicción de la distribución espacial de una variable, la función permite estimar escenarios a partir de la simulación de alteraciones en alguna (o algunas) de las variables independientes.
+A partir de la prediccion de la distribucion espacial de una variable, la funcion permite estimar escenarios a partir de la simulacion de alteraciones en alguna (o algunas) de las variables independientes.
 }
 \author{
 Juan Pablo Carranza
