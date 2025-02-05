@@ -34,8 +34,7 @@
 calcular_entorno <- function(area, objeto, dim, ext, nombre){
   a = table(st_geometry_type(objeto)) %>% as.data.frame() %>% dplyr::filter(Freq > 0)
   if(a$Var1 != "POINT" & a$Var1 != "POLYGON" & a$Var1 != "MULTIPOLYGON"){
-    print("Error: El objeto provisto para el cálculo debe tener geometrías de clase 'POINT', 'POLYGON' o 'MULTIPOLYGON'.")
-    break
+    stop("Error: El objeto provisto para el cálculo debe tener geometrías de clase 'POINT', 'POLYGON' o 'MULTIPOLYGON'.")
   }
   if(a$Var1 == "POLYGON" | a$Var1 == "MULTIPOLYGON"){
   area <- sf::st_transform(area, 3857)
