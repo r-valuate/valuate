@@ -2,8 +2,8 @@ Package: valuate
 Type: Package
 Title: Caja de herramientas para la realización de estudios territoriales
 Version: 0.1.0
-Author: person("Juan Pablo", "Carranza", email = "juan.carranza@unc.edu.ar",
-                  role = c("aut", "cre"))
+Authors@R: c(person(given = "Juan Pablo", family = "Carranza", email = "juan.carranza@unc.edu.ar",
+                  role = c("aut", "cre", "ctb")))
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 Encoding: UTF-8

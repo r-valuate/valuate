@@ -42,7 +42,6 @@ calcular_vut(df = datos,
              dependiente = "valor_m2",
              dist = 500)
 
-summary(resultado)
 
 }
 \author{

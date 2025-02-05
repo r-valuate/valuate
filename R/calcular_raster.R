@@ -13,9 +13,9 @@
 #'
 #' @examples
 #' library(terra)
-#' original = rast("edificaciones.tif")
+#' original = rast("data/edificaciones.tif")
 #' library(sf)
-#' area_de_estudio = st_read("area.gpkg")
+#' area_de_estudio = st_read("data/area.gpkg")
 #' calcular_raster(original, area_de_estudio, dim = 50, entorno = 100, "prueba_raster")
 #'
 calcular_raster <- function(raster, area, dim, entorno=0, nombre){

@@ -30,7 +30,6 @@
 #'              dependiente = "valor_m2",
 #'              dist = 500)
 #'
-#' summary(resultado)
 #'
 calcular_vut <- function(df, index, dependiente, independientes, dist) {
 datos = df
