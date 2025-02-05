@@ -17,6 +17,7 @@ library(valuate)
 # Valuate
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/carranzajuanp/valuate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/carranzajuanp/valuate/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Este paquete provee una serie de funciones orientadas a facilitar el proceso de valuación de inmuebles, siguiendo el desarrollo de Carranza & Eguino Lijeron (2025). Sin embargo, puede ser también de utilidad para la predicción de la distribución espacial de cualquier tipo de fenómeno geográfico.

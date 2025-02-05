@@ -4,6 +4,8 @@
 # Valuate
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/carranzajuanp/valuate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/carranzajuanp/valuate/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Este paquete provee una serie de funciones orientadas a facilitar el
