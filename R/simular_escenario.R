@@ -1,15 +1,14 @@
-#' Simulación de escenarios y estimación de externalidades espaciales
-#' @description A partir de la predicción de la distribución espacial de una variable, la función permite estimar escenarios a partir de la simulación de alteraciones en alguna (o algunas) de las variables independientes.
+#' Simulacion de escenarios y estimacion de externalidades espaciales
+#' @description A partir de la prediccion de la distribucion espacial de una variable, la funcion permite estimar escenarios a partir de la simulacion de alteraciones en alguna (o algunas) de las variables independientes.
 #'
 #' @author Juan Pablo Carranza
 #'
-#' @param modelo Archivo .rda guardado en el directorio de trabajo por la función estimar_modelo().
-#' @param independientes Vector con los nombres de las variables independientes. Debe tener los mismos nombre que los utilizados en la función estimar_modelo(), sólo que admite que los rásters tengan una distribución espacial diferente, incorporando modificaciones simuladas a la nueva predicción.
-#' @param original Resultado del modelo original. Es un archivo .tif guardado en el directorio de trabajo por la función estimar_modelo().
+#' @param modelo Archivo .rda guardado en el directorio de trabajo por la funcion estimar_modelo().
+#' @param independientes Vector con los nombres de las variables independientes. Debe tener los mismos nombre que los utilizados en la funcion estimar_modelo(), solo que admite que los rasters tengan una distribucion espacial diferente, incorporando modificaciones simuladas a la nueva prediccion.
+#' @param original Resultado del modelo original. Es un archivo .tif guardado en el directorio de trabajo por la funcion estimar_modelo().
 #'
-#' @return La función devuelve un ráster que informa sobre el impacto en la variable dependiente de las simulaciones realizadas en las variables independientes. Permite estimar la magnitud y el alcance territorial de las modificaciones simuladas sobre la variable de estudio.
+#' @return La funcion devuelve un raster que informa sobre el impacto en la variable dependiente de las simulaciones realizadas en las variables independientes. Permite estimar la magnitud y el alcance territorial de las modificaciones simuladas sobre la variable de estudio.
 #' @export
-#'
 simular_escenario <- function(modelo, independientes, original){
   load(modelo)
   pred = raster::stack(independientes)

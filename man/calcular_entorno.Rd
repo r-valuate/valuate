@@ -25,16 +25,13 @@ Esta función devuelve un ráster que resume las características del vecindario
 }
 \examples{
 # Definimos el área de estudio
-library(nominatimlite)
-library(osmdata)
-library(sf)
-area_de_estudio <- geo_lite_sf(address = "La Plata, Argentina", points_only = F)
-bbox = st_transform(area_de_estudio, 4326) |> st_bbox(bbox)
+area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = F)
+bbox = sf::st_transform(area_de_estudio, 4326) |> st_bbox(bbox)
 
 # Descargamos los parques que se encuentran dentro del área de estudio
-plazas <- opq(bbox) |>
-  add_osm_feature(key = "leisure", value = "park") |>
-  osmdata_sf()
+plazas <- osmdata::opq(bbox) |>
+  osmdata::add_osm_feature(key = "leisure", value = "park") |>
+  osmdata::osmdata_sf()
 plazas <- plazas$osm_polygons
 
 # Calculamos un ráster que resume, para cada píxel las características del entorno

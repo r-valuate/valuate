@@ -1,14 +1,14 @@
-#' Identificación de valores espacialmente atípicos
+#' Identificacion de valores espacialmente atipicos
 #'
-#' @description Esta función permite eliminar observaciones cuyo valor es muy diferente a los observados en el entorno. Permite identificar outliers espaciales mediante el cálculo del índice de Moran local, o mediante el promedio observado en el entorno ponderado por la distancia.
+#' @description Esta funcion permite eliminar observaciones cuyo valor es muy diferente a los observados en el entorno. Permite identificar outliers espaciales mediante el calculo del indice de Moran local, o mediante el promedio observado en el entorno ponderado por la distancia.
 #' @author Juan Pablo Carranza
-#' @param df Dataframe sobre el que se realizará el cálculo. Debe ser un objeto de la librería 'sf' con geometría 'POINT'.
-#' @param dist Distancia euclidiana que define la extensión del vecindario en el que se compararán los valores.
-#' @param variable Nombre de la variable sobre la que se realizará el cálculo.
-#' @param umbral Umbral para caracterizar a una observación como atípica en relación a lo observado en el vecindario. Por ejemplo, un umbral igual a 0.1 implicará que se caracterizarán como outliers a todas aquellas observaciones cuyo valor esté por encima o por debajo del observado en el vecindario en una magnitud igual a +/- 10\%.
-#' @param moran Logical. Si asume el valor 'TRUE' se procede a identificar outliers mediante el cálculo del índice de Moran local. En este caso, el parámetro 'umbral' queda sin efecto.
+#' @param df Dataframe sobre el que se realizara el calculo. Debe ser un objeto de la libreria 'sf' con geometria 'POINT'.
+#' @param dist Distancia euclidiana que define la extension del vecindario en el que se compararan los valores.
+#' @param variable Nombre de la variable sobre la que se realizara el calculo.
+#' @param umbral Umbral para caracterizar a una observacion como atipica en relacion a lo observado en el vecindario. Por ejemplo, un umbral igual a 0.1 implicara que se caracterizaran como outliers a todas aquellas observaciones cuyo valor este por encima o por debajo del observado en el vecindario en una magnitud igual a +/- 10\%.
+#' @param moran Logical. Si asume el valor 'TRUE' se procede a identificar outliers mediante el calculo del indice de Moran local. En este caso, el parametro 'umbral' queda sin efecto.
 #'
-#' @return La función permite identificar valores que son muy diferentes a los observados en el entorno. Para ello, compara el valor de cada observación con el promedio del entorno (ponderado por la distancia, mediante la construcción de una matriz de pesos espaciales). También permite identificar outliers espaciales mediante el cálculo del índice de Moran local, siguiendo a Anselin (1995).
+#' @return La funcion permite identificar valores que son muy diferentes a los observados en el entorno. Para ello, compara el valor de cada observacion con el promedio del entorno (ponderado por la distancia, mediante la construccion de una matriz de pesos espaciales). Tambien permite identificar outliers espaciales mediante el calculo del indice de Moran local, siguiendo a Anselin (1995).
 #' @export
 #' @references
 #' Anselin, L. (1995). Local Indicators of Spatial Association—LISA.
@@ -20,22 +20,21 @@
 #' # Cargamos la base de datos
 #' load("resultado.rda")
 #'
-#' # Se define la estimación de observaciones atípicas a partir de la variable 'vut'
-#' # La distancia para el cálculo es de 50 metros lineales. Esto define la extensión del vecindario.
-#' # El umbral para considerar a una observación como atípica se define igual a 0.1 (+/- 10\%)
-#' # No se realiza el cálculo mediante el índice de Moran local.
+#' # Se define la estimacion de observaciones atipicas a partir de la variable 'vut'
+#' # La distancia para el calculo es de 50 metros lineales. Esto define la extension del vecindario.
+#' # El umbral para considerar a una observacion como atipica se define igual a 0.1 (+/- 10\%)
+#' # No se realiza el calculo mediante el indice de Moran local.
 #' eliminar_outliers(df = resultado,
 #'                   dist = 50,
 #'                   variable = "vut",
 #'                   umbral = 0.1,
 #'                   moran = FALSE)
 #'
-#' # Si, en cambio, se desea identificar valores atípicos mediante el cálculo del índice de Moran local:
+#' # Si, en cambio, se desea identificar valores atipicos mediante el calculo del indice de Moran local:
 #' eliminar_outliers(df = resultado,
 #'                   dist = 50,
 #'                   variable = "vut",
 #'                   moran = TRUE)
-#'
 eliminar_outliers <- function(df, dist, variable, umbral, moran) {
   df = subset(df, is.na(df[[variable]]) == FALSE)
   cord <- sf::st_coordinates(df)

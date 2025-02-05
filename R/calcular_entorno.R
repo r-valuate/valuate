@@ -1,31 +1,28 @@
-##' Cálculo de variables de entorno
+##' Calculo de variables de entorno
 #'
-#' @description Esta función devuelve un ráster que resume las características del vecindario a partir de capas geográficas vectoriales de polígonos o de puntos.
+#' @description Esta funcion devuelve un raster que resume las caracteristicas del vecindario a partir de capas geograficas vectoriales de poligonos o de puntos.
 #' @author Juan Pablo Carranza
-#' @param area Polígono que indica el área sobre la cuál se ejecutará el cálculo.
-#' @param objeto Objeto espacial "sf" con geometría del tipo "POLYGON" o "MULTIPOLYGON" sobre el que se calcularán las características del entorno.
-#' @param dim Tamaño de cada píxel del ráster resultante, en metros.
-#' @param ext Extensión del entorno o radio que define el vecindario, en metros lineales.
-#' @param nombre Nombre de la variable resultante. El ráster será guardado en el entorno de trabajo con éste nombre y la extensión ".tif".
+#' @param area Poligono que indica el area sobre la cual se ejecutara el calculo.
+#' @param objeto Objeto espacial "sf" con geometria del tipo "POLYGON" o "MULTIPOLYGON" sobre el que se calcularan las caracteristicas del entorno.
+#' @param dim Tamano de cada pixel del raster resultante, en metros.
+#' @param ext Extension del entorno o radio que define el vecindario, en metros lineales.
+#' @param nombre Nombre de la variable resultante. El raster sera guardado en el entorno de trabajo con este nombre y la extension ".tif".
 #'
-#' @return Cuando se le provee un objeto espacial "sf" con geometría "POLYGON" o "MULTIPOLYGON" la función permite calcular variables independientes que resumen las características del vecindario, indicando la proporción del espacio que se encuentra cubierto por los polígonos de interés. Por ejemplo, permite calcular el porcentaje del vecindario que se encuentra cubierto por plazas o parques. Cuando se le provee un objeto espacial "sf" con geometría "POINT" la función permite calcular variables independientes que resumen las características del vecindario, indicando la cantidad de puntos de interés que se encuentran dentro del entorno definido por el usuario. Por ejemplo, permite calcular la cantidad de negocios u oficinas que se encuentran dentro de un radio de "x" metros de cada píxel.
+#' @return Cuando se le provee un objeto espacial "sf" con geometria "POLYGON" o "MULTIPOLYGON" la funcion permite calcular variables independientes que resumen las caracteristicas del vecindario, indicando la proporcion del espacio que se encuentra cubierto por los poligonos de interes. Por ejemplo, permite calcular el porcentaje del vecindario que se encuentra cubierto por plazas o parques. Cuando se le provee un objeto espacial "sf" con geometria "POINT" la funcion permite calcular variables independientes que resumen las caracteristicas del vecindario, indicando la cantidad de puntos de interes que se encuentran dentro del entorno definido por el usuario. Por ejemplo, permite calcular la cantidad de negocios u oficinas que se encuentran dentro de un radio de "x" metros de cada pixel.
 #' @export
 #'
 #' @examples
-#' # Definimos el área de estudio
-#' library(nominatimlite)
-#' library(osmdata)
-#' library(sf)
-#' area_de_estudio <- geo_lite_sf(address = "La Plata, Argentina", points_only = F)
-#' bbox = st_transform(area_de_estudio, 4326) |> st_bbox(bbox)
+#' # Definimos el area de estudio
+#' area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = F)
+#' bbox = sf::st_transform(area_de_estudio, 4326) |> st_bbox(bbox)
 #'
-#' # Descargamos los parques que se encuentran dentro del área de estudio
-#' plazas <- opq(bbox) |>
-#'   add_osm_feature(key = "leisure", value = "park") |>
-#'   osmdata_sf()
+#' # Descargamos los parques que se encuentran dentro del area de estudio
+#' plazas <- osmdata::opq(bbox) |>
+#'   osmdata::add_osm_feature(key = "leisure", value = "park") |>
+#'   osmdata::osmdata_sf()
 #' plazas <- plazas$osm_polygons
 #'
-#' # Calculamos un ráster que resume, para cada píxel las características del entorno
+#' # Calculamos un raster que resume, para cada pixel, las caracteristicas del entorno
 #' calcular_entorno(area = area_de_estudio,
 #'                  ext = 500,
 #'                  objeto = plazas,

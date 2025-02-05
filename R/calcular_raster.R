@@ -1,14 +1,14 @@
-#' Cálculo de variables ráster
+#' Calculo de variables raster
 #'
-#' @description Esta función devuelve un ráster que resume el cálculo realizado a partir de otro ráster, incluyendo fuentes de datos con diferente proyección y resolución espacial.
+#' @description Esta funcion devuelve un raster que resume el calculo realizado a partir de otro raster, incluyendo fuentes de datos con diferente proyeccion y resolucion espacial.
 #' @author Juan Pablo Carranza
-#' @param raster  Ráster original sobre el que se pretende realizar el cálculo.
-#' @param area Área sobre la que se desea realizar el cálculo.
-#' @param dim Tamaño de cada píxel del ráster resultante, en metros.
-#' @param entorno Distancia sobre la que se pretende resumir la información del ráster original. Default = 0. En todo otro caso se calcula el promedio de los valores de los píxeles en un área circular con un radio igual a la distancia establecida en este parámetro.
-#' @param nombre Nombre de la variable resultante. El ráster será guardado en el entorno de trabajo con éste nombre y la extensión ".tif".
+#' @param raster  Raster original sobre el que se pretende realizar el calculo.
+#' @param area Area sobre la que se desea realizar el calculo.
+#' @param dim Tamano de cada pixel del raster resultante, en metros.
+#' @param entorno Distancia sobre la que se pretende resumir la informacion del raster original. Default = 0. En todo otro caso se calcula el promedio de los valores de los pixeles en un area circular con un radio igual a la distancia establecida en este parametro.
+#' @param nombre Nombre de la variable resultante. El raster sera guardado en el entorno de trabajo con este nombre y la extension ".tif".
 #'
-#' @return La función permite readecuar las resoluciones y proyecciones de diferentes rásters a las utilizadas en el proyecto. Además, el paŕametro "entorno" permite realizar un cálculo del promedio de la variable bajo análisis en el vecindario definido por el usuario.
+#' @return La funcion permite readecuar las resoluciones y proyecciones de diferentes rasters a las utilizadas en el proyecto. Ademas, el parametro "entorno" permite realizar un calculo del promedio de la variable bajo analisis en el vecindario definido por el usuario.
 #' @export
 #'
 #' @examples
@@ -17,7 +17,6 @@
 #' library(sf)
 #' area_de_estudio = st_read("data/area.gpkg")
 #' calcular_raster(original, area_de_estudio, dim = 50, entorno = 100, "prueba_raster")
-#'
 calcular_raster <- function(raster, area, dim, entorno=0, nombre){
         raster = terra::project(raster, "epsg:3857")
         raster = terra::crop(raster, sf::st_transform(area, 3857))

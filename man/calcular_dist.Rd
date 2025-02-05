@@ -23,16 +23,13 @@ Esta función devuelve un ráster con las distancias euclidianas, en metros, des
 }
 \examples{
 # Definimos el área de estudio
-library(nominatimlite)
-library(osmdata)
-library(sf)
-area_de_estudio <- geo_lite_sf(address = "La Plata, Argentina", points_only = F)
-bbox = st_transform(area_de_estudio, 4326) |> st_bbox(bbox)
+area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = F)
+bbox = sf::st_transform(area_de_estudio, 4326) |> st_bbox(bbox)
 
 # Descargamos las vias principales
-vias_prim <- opq(bbox) |>
-  add_osm_feature(key = "highway", value = "secondary") |>
-  osmdata_sf()
+vias_prim <- osmdata::opq(bbox) |>
+  osmdata::add_osm_feature(key = "highway", value = "secondary") |>
+  osmdata::osmdata_sf()
 vias_prim <- vias_prim$osm_lines
 
 # Calculamos un ráster con las distancias a la vía principal más cercana
