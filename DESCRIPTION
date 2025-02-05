@@ -6,7 +6,7 @@ Authors@R: c(person(given = "Juan Pablo", family = "Carranza", email = "juan.car
                   role = c("aut", "cre", "ctb")))
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-Encoding: UTF-8
+Encoding: latin-1
 LazyData: true
 Depends: 
     R (>= 3.5)
