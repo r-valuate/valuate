@@ -10,7 +10,6 @@
 #' @return La funcion devuelve un raster que informa sobre el impacto en la variable dependiente de las simulaciones realizadas en las variables independientes. Permite estimar la magnitud y el alcance territorial de las modificaciones simuladas sobre la variable de estudio.
 #' @export
 simular_escenario <- function(modelo, independientes, original){
-  utils::globalVariables(c("qrf"))
   load(modelo)
   pred = raster::stack(independientes)
   simulacion = terra::interpolate(terra::rast(pred), qrf, na.rm = TRUE, wopt=list(steps=80))

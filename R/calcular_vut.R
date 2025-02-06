@@ -30,8 +30,6 @@
 #'              dependiente = "valor_m2",
 #'              dist = 500)
 calcular_vut <- function(df, index, dependiente, independientes, dist) {
-  utils::globalVariables(c("na.omit", "Variable", "'Pr(>|z|)'", "impactos$total",
-                           "Estimate","Valor","mediana","id","tipo","impacto"))
   datos = df
   if ("media" %in% independientes) {val = "media"} else (val = "mediana")
   df <- subset(df, select = c(index[[1]], names(independientes), dependiente))

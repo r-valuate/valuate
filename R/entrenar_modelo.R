@@ -56,7 +56,6 @@
 #'                 modelo = "qrf",
 #'                 umbral = 0.2)
 entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbral=0.3, eliminar=0.4) {
-        utils::globalVariables(c("rowIndex", "mape", "condicion", "quantile"))
         df$ID = 1:nrow(df)
         form = paste0(dependiente, " ~ ", paste(sub(".tif", "", independientes), collapse=' + '))
         pred = raster::stack(independientes)

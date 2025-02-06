@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-#' original = terra::rast("data/edificaciones.tif")
+#' original = terra::rast("inst/extdata/edificaciones.tif")
 #' area_de_estudio = sf::st_read("inst/extdata/area.gpkg")
 #' calcular_raster(original, area_de_estudio, dim = 50, entorno = 100, "prueba_raster")
 calcular_raster <- function(raster, area, dim, entorno=0, nombre){
