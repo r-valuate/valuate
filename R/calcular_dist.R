@@ -34,8 +34,8 @@ calcular_dist <- function(area, objeto, dim, nombre){
   r <- terra::crop(r, area)
   r <- terra::rast(r)
   terra::crs(r)  <- "epsg:3857"
-  var <- terra::distance(r, terra::vect(sf::as(objeto,"Spatial")))
-  var <- terra::crop(var, terra::vect(sf::as(area, "Spatial")), mask=TRUE)
+  var <- terra::distance(r, terra::vect(methods::as(objeto,"Spatial")))
+  var <- terra::crop(var, terra::vect(methods::as(area, "Spatial")), mask=TRUE)
   names(var) <- nombre
   terra::plot(var, col = viridis::plasma(100), main = paste0("Variable: ", nombre))
   terra::writeRaster(var, paste0(nombre, ".tif"), overwrite = TRUE)

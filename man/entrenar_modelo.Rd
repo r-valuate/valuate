@@ -43,22 +43,22 @@ Esta funcion permite entrenar modelos y cuantificar su error en la prediccion de
 }
 \examples{
 # A continuacion se presenta un ejemplo para la Ciudad de Medellin (Colombia), con solo 500 datos.
-load("data/datos.Rda")
+load("data/datos.rda")
 
 entrenar_modelo(df = dat,
                 dependiente = "vut",
-                independientes = c("data/dist_basura.tif",
-                                   "data/dist_industria.tif",
-                                   "data/dist_plazas_parques.tif",
-                                   "data/dist_tren.tif",
-                                   "data/dist_vias_autopista.tif",
-                                   "data/dist_vias_prim.tif",
-                                   "data/dist_vias_sec.tif",
-                                   "data/entorno_altura.tif",
-                                   "data/entorno_plazas_parques.tif",
-                                   "data/entorno_comercios.tif",
-                                   "data/entorno_edificaciones.tif",
-                                   "data/entorno_hoteles.tif"),
+                independientes = c("inst/extdata/dist_basura.tif",
+                                   "inst/extdata/dist_industria.tif",
+                                   "inst/extdata/dist_plazas_parques.tif",
+                                   "inst/extdata/dist_tren.tif",
+                                   "inst/extdata/dist_vias_autopista.tif",
+                                   "inst/extdata/dist_vias_prim.tif",
+                                   "inst/extdata/dist_vias_sec.tif",
+                                   "inst/extdata/entorno_altura.tif",
+                                   "inst/extdata/entorno_plazas_parques.tif",
+                                   "inst/extdata/entorno_comercios.tif",
+                                   "inst/extdata/entorno_edificaciones.tif",
+                                   "inst/extdata/entorno_hoteles.tif"),
                 modelo = "qrf",
                 umbral = 0.2)
 }

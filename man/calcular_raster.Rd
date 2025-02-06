@@ -24,10 +24,8 @@ La funcion permite readecuar las resoluciones y proyecciones de diferentes raste
 Esta funcion devuelve un raster que resume el calculo realizado a partir de otro raster, incluyendo fuentes de datos con diferente proyeccion y resolucion espacial.
 }
 \examples{
-library(terra)
-original = rast("data/edificaciones.tif")
-library(sf)
-area_de_estudio = st_read("data/area.gpkg")
+original = terra::rast("data/edificaciones.tif")
+area_de_estudio = sf::st_read("inst/extdata/area.gpkg")
 calcular_raster(original, area_de_estudio, dim = 50, entorno = 100, "prueba_raster")
 }
 \author{

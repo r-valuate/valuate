@@ -29,8 +29,7 @@
 #'                  dim = 50,
 #'                  nombre = "plazas_entorno")
 calcular_entorno <- function(area, objeto, dim, ext, nombre){
-  utils::globalVariables(c("Freq"))
-  a = table(sf::st_geometry_type(objeto)) |> as.data.frame() |> dplyr::filter(Freq > 0)
+  a = table(sf::st_geometry_type(objeto)) |> as.data.frame() |> dplyr::filter(.data$Freq > 0)
   if(a$Var1 != "POINT" & a$Var1 != "POLYGON" & a$Var1 != "MULTIPOLYGON"){
     stop("Error: El objeto provisto para el cálculo debe tener geometrías de clase 'POINT', 'POLYGON' o 'MULTIPOLYGON'.")
   }
