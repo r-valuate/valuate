@@ -39,7 +39,7 @@ eliminar_outliers <- function(df, dist, variable, umbral, moran) {
   df = subset(df, is.na(df[[variable]]) == FALSE)
   cord <- sf::st_coordinates(df)
   d <- suppressWarnings(spdep::dnearneigh(cord, 0, dist))
-  dlist <- spdep::nbdists(d, coordinates(cord))
+  dlist <- spdep::nbdists(d, sp::coordinates(cord))
   idlist <- lapply(dlist, function(x) 1/x)
   lw <- spdep::nb2listw(d, glist=idlist ,style="W" , zero.policy = TRUE)
   if (moran == TRUE){

@@ -30,12 +30,14 @@
 #'              dependiente = "valor_m2",
 #'              dist = 500)
 calcular_vut <- function(df, index, dependiente, independientes, dist) {
+  utils::globalVariables(c("na.omit", "Variable", "'Pr(>|z|)'", "impactos$total",
+                           "Estimate","Valor","mediana","id","tipo","impacto"))
   datos = df
   if ("media" %in% independientes) {val = "media"} else (val = "mediana")
   df <- subset(df, select = c(index[[1]], names(independientes), dependiente))
   df <- dplyr::rename(df, id = names(sf::st_drop_geometry(df[,index])))
   n <- nrow(df)
-  df <- na.omit(df)
+  df <- stats::na.omit(df)
   if (nrow(df) < n) {message(paste0("Se eliminarán ", n - nrow(df), " observaciones con datos faltantes"))}
   n <- nrow(df)
   df <- sf::st_difference(df)
@@ -46,7 +48,7 @@ calcular_vut <- function(df, index, dependiente, independientes, dist) {
   for (i in c(1:length(independientes))) {
     n <- match(names(independientes)[[i]], names(a))
     if (is.factor(a[,n] )){
-      a[,n] <- relevel(a[,n], ref = independientes[[i]])
+      a[,n] <- stats::relevel(a[,n], ref = independientes[[i]])
     }
   }
   a[sapply(a, is.integer)] <- lapply(a[sapply(a, is.integer)],
@@ -54,7 +56,7 @@ calcular_vut <- function(df, index, dependiente, independientes, dist) {
   a <- dplyr::mutate_if(a, is.numeric, log)
   sf::st_geometry(df) <- "geom"
   df <- cbind(df[,c("id","geom")], a)
-  form <- reformulate(response = dependiente, names(independientes))
+  form <- stats::reformulate(response = dependiente, names(independientes))
   ols <- lm(form, df)
   cord <- sf::st_coordinates(df)
   d <- suppressWarnings(spdep::dnearneigh(cord, 0, dist))
@@ -226,14 +228,14 @@ calcular_vut <- function(df, index, dependiente, independientes, dist) {
   coef <- suppressMessages(dplyr::left_join(coef, impactos[,c("Variable","Efecto")]))
   coef$Valor <- suppressWarnings(as.numeric(coef$value))
   aux <- sf::st_drop_geometry(df)
-  numericas <- aux |> dplyr::select(where(is.numeric)) |> names()
+  numericas <- aux |> dplyr::select(dplyr::where(is.numeric)) |> names()
   numericas <- numericas[numericas %in% names(independientes)]
-  factores <- aux |> dplyr::select(where(is.factor)) |> names()
+  factores <- aux |> dplyr::select(dplyr::where(is.factor)) |> names()
   factores <- factores[factores %in% names(independientes)]
   coef$tipo <- ifelse(coef$Variable %in% numericas, "Numerica", "No numerica")
   coef <- coef |>
     dplyr::group_by(Variable) |>
-    dplyr::mutate(mediana = if (val == "media") {mean(Valor)} else (median(Valor)),
+    dplyr::mutate(mediana = if (val == "media") {mean(Valor)} else (stats::median(Valor)),
                   referencia = Valor / mediana)
   coef$impacto <- ifelse(coef$tipo == "Numerica", coef$referencia ^ coef$Efecto,
                          ifelse(coef$tipo == "No numerica" & is.na(coef$Efecto) == F,
@@ -246,7 +248,7 @@ calcular_vut <- function(df, index, dependiente, independientes, dist) {
     dplyr::filter(tipo == "Numerica") |>
     dplyr::mutate(aux = prod(impacto)) |>
     dplyr::arrange(id) |>
-    na.omit()
+    stats::na.omit()
 
   segundo <- coef |>
     dplyr::group_by(id) |>
@@ -257,12 +259,12 @@ calcular_vut <- function(df, index, dependiente, independientes, dist) {
   coef$coef <- coef$aux * coef$exp
   datos <- suppressMessages(dplyr::left_join(datos, coef[,c("id","coef")]))
   datos[,"vut"] <- sf::st_drop_geometry(datos[,dependiente]) * datos$coef
-  par(mfrow = c(1, 2))
-  datos <- datos |> dplyr::select(everything(), attr(datos,"sf_column"))
+  graphics::par(mfrow = c(1, 2))
+  datos <- datos |> dplyr::select(dplyr::everything(), attr(datos,"sf_column"))
   plot(as.vector(sf::st_drop_geometry(datos[,"vut"]))[[1]], as.vector(sf::st_drop_geometry(datos[,dependiente]))[[1]],
        xlab = "VUT", ylab = "Precio")
-  abline(1,1)
-  hist(datos$vut, xlab = "VUT", main = "")
+  graphics::abline(1,1)
+  graphics::hist(datos$vut, xlab = "VUT", main = "")
   datos <- dplyr::rename_at(datos, dplyr::vars(id), ~index)
   assign("resultado", datos, envir=globalenv())
   message("El proceso de homogeneización ha finalizado. Se ha¨ agregado al entorno de trabajo un nuevo objeto que contiene la muestra original, más una nueva columna llamada 'vut', que contiene el precio reexpresado en términos homogéneos.")

@@ -12,10 +12,8 @@
 #' @export
 #'
 #' @examples
-#' library(terra)
-#' original = rast("data/edificaciones.tif")
-#' library(sf)
-#' area_de_estudio = st_read("data/area.gpkg")
+#' original = terra::rast("data/edificaciones.tif")
+#' area_de_estudio = sf::st_read("inst/extdata/area.gpkg")
 #' calcular_raster(original, area_de_estudio, dim = 50, entorno = 100, "prueba_raster")
 calcular_raster <- function(raster, area, dim, entorno=0, nombre){
         raster = terra::project(raster, "epsg:3857")

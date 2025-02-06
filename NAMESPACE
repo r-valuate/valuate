@@ -7,3 +7,7 @@ export(calcular_vut)
 export(eliminar_outliers)
 export(entrenar_modelo)
 export(simular_escenario)
+importFrom("graphics", "abline", "hist", "par")
+importFrom("methods", "as")
+importFrom("stats", "as.formula", "median", "na.omit", "quantile",
+             "reformulate", "relevel")

@@ -37,60 +37,55 @@
 #'
 #' @examples
 #' # A continuacion se presenta un ejemplo para la Ciudad de Medellin (Colombia), con solo 500 datos.
-#' load("data/datos.Rda")
+#' load("data/datos.rda")
 #'
 #' entrenar_modelo(df = dat,
 #'                 dependiente = "vut",
-#'                 independientes = c("data/dist_basura.tif",
-#'                                    "data/dist_industria.tif",
-#'                                    "data/dist_plazas_parques.tif",
-#'                                    "data/dist_tren.tif",
-#'                                    "data/dist_vias_autopista.tif",
-#'                                    "data/dist_vias_prim.tif",
-#'                                    "data/dist_vias_sec.tif",
-#'                                    "data/entorno_altura.tif",
-#'                                    "data/entorno_plazas_parques.tif",
-#'                                    "data/entorno_comercios.tif",
-#'                                    "data/entorno_edificaciones.tif",
-#'                                    "data/entorno_hoteles.tif"),
+#'                 independientes = c("inst/extdata/dist_basura.tif",
+#'                                    "inst/extdata/dist_industria.tif",
+#'                                    "inst/extdata/dist_plazas_parques.tif",
+#'                                    "inst/extdata/dist_tren.tif",
+#'                                    "inst/extdata/dist_vias_autopista.tif",
+#'                                    "inst/extdata/dist_vias_prim.tif",
+#'                                    "inst/extdata/dist_vias_sec.tif",
+#'                                    "inst/extdata/entorno_altura.tif",
+#'                                    "inst/extdata/entorno_plazas_parques.tif",
+#'                                    "inst/extdata/entorno_comercios.tif",
+#'                                    "inst/extdata/entorno_edificaciones.tif",
+#'                                    "inst/extdata/entorno_hoteles.tif"),
 #'                 modelo = "qrf",
 #'                 umbral = 0.2)
 entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbral=0.3, eliminar=0.4) {
-        suppressPackageStartupMessages(library(terra))
-        suppressPackageStartupMessages(library(sf))
-        suppressPackageStartupMessages(library(tidyverse))
+        utils::globalVariables(c("rowIndex", "mape", "condicion", "quantile"))
         df$ID = 1:nrow(df)
         form = paste0(dependiente, " ~ ", paste(sub(".tif", "", independientes), collapse=' + '))
         pred = raster::stack(independientes)
-        variable <- terra::extract(rast(pred), terra::vect(df))
+        variable <- terra::extract(terra::rast(pred), terra::vect(df))
         df = suppressMessages(dplyr::left_join(df, variable, by = "ID"))
-        df = na.omit(df)
+        df = stats::na.omit(df)
         mapeSummary <- function (data, lev = NULL, model = NULL) {
           mape <- function(y, yhat) mean(abs((y - yhat)/y)) * (-1)
           out <- mape(data$obs, data$pred)
           names(out) <- "MAPE"
           out
         }
-        suppressPackageStartupMessages(library(caret))
         fitControl <- caret::trainControl(method = "cv", number = 10,
                                           summaryFunction = mapeSummary,
                                           savePredictions = 'final')
-        suppressPackageStartupMessages(library(parallel))
-        suppressPackageStartupMessages(library(doParallel))
-        cores = detectCores()
-        cl <- makeCluster(cores[1])
-        registerDoParallel(cl)
+        cores <- parallel::detectCores()
+        cl <- parallel::makeCluster(cores[1])
+        doParallel::registerDoParallel(cl)
         df_qrf = sf::st_drop_geometry(df)
         message("...entrenando modelo...")
         repeat{
                 df_qrf$id = 1:nrow(df_qrf)
                 set.seed(11)
-                qrf <- train(as.formula(form),
-                             data = df_qrf,
-                             preProcess = c("center","scale"),
-                             method = modelo,
-                             trControl = fitControl,
-                             metric = "MAPE")
+                qrf <- caret::train(stats::as.formula(form),
+                                    data = df_qrf,
+                                    preProcess = c("center","scale"),
+                                    method = modelo,
+                                    trControl = fitControl,
+                                    metric = "MAPE")
                 predicciones = qrf$pred
                 predicciones = predicciones[,c("rowIndex","pred","obs")]
                 predicciones$mape = abs(predicciones$pred - predicciones$obs) / predicciones$obs
@@ -98,8 +93,8 @@ entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbra
                           break
                           message("El entrenamiento ha finalizado.")
                           }
-                predicciones = rename(predicciones, id = rowIndex)
-                df_qrf = suppressMessages(left_join(df_qrf, predicciones[,c("mape","id")]))
+                predicciones = dplyr::rename(predicciones, id = rowIndex)
+                df_qrf = suppressMessages(dplyr::left_join(df_qrf, predicciones[,c("mape","id")]))
                 a = nrow(df_qrf)
                 df_qrf = subset(df_qrf, mape < eliminar)
                 message(paste0("El MAPE por el momento es igual a +/- ", round(mean(predicciones$mape)*100,2), "%. Se eliminarán ", nrow(df_qrf) - a, " observaciones. El proceso continúa con ", nrow(df_qrf), " datos."))
@@ -115,9 +110,9 @@ entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbra
         assign("datos_utilizados", df_utilizados, envir=globalenv())
         assign("datos_eliminados", df_eliminados, envir=globalenv())
         message("...realizando interpolación...")
-        vut = terra::interpolate(rast(pred), qrf, na.rm = TRUE, wopt=list(steps=80))
+        vut = terra::interpolate(terra::rast(pred), qrf, na.rm = TRUE, wopt=list(steps=80))
         terra::plot(vut, breaks = terra::global(vut, quantile, probs = seq(0,1,0.1), na.rm=TRUE), smooth = TRUE)
-        writeRaster(vut, "vut.tif", overwrite = TRUE)
+        terra::writeRaster(vut, "vut.tif", overwrite = TRUE)
         save(qrf, file = "modelo.rda")
         message("En el directorio de trabajo se ha guardado un ráster con la predicción, con el nombre 'vut.tif'.")
         message("En el directorio de trabajo se ha guardado un archivo con el modelo aplicado, con el nombre 'modelo.rda'.")

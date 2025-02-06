@@ -29,6 +29,7 @@
 #'                  dim = 50,
 #'                  nombre = "plazas_entorno")
 calcular_entorno <- function(area, objeto, dim, ext, nombre){
+  utils::globalVariables(c("Freq"))
   a = table(sf::st_geometry_type(objeto)) |> as.data.frame() |> dplyr::filter(Freq > 0)
   if(a$Var1 != "POINT" & a$Var1 != "POLYGON" & a$Var1 != "MULTIPOLYGON"){
     stop("Error: El objeto provisto para el cálculo debe tener geometrías de clase 'POINT', 'POLYGON' o 'MULTIPOLYGON'.")
@@ -47,7 +48,7 @@ calcular_entorno <- function(area, objeto, dim, ext, nombre){
   objeto$aux <- 1
   var <- fasterize::fasterize(objeto, raster::raster(r), field = "aux", fun = "sum")
   var <- terra::project(terra::rast(var), "epsg:3857")
-  var <- terra::ifel(base::is.na(var), 0, var)
+  var <- terra::ifel(is.na(var), 0, var)
   fw <- raster::focalWeight(var, ext, "circle")
   var <- terra::focal(x = var, w = fw, fun = "mean")
   names(var) <- nombre
@@ -81,7 +82,7 @@ calcular_entorno <- function(area, objeto, dim, ext, nombre){
    var <- terra::project(terra::rast(var), "epsg:3857")
    var <- terra::ifel(is.na(var), 0, var)
    fw <- raster::focalWeight(var, ext, "circle")
-   fw <- base::replace(fw, fw > 0, 1)
+   fw <- replace(fw, fw > 0, 1)
    var <- terra::focal(x = var, w = fw, fun = "sum")
    names(var) <- nombre
    var <- terra::crop(var, sf::st_transform(area, 3857))
