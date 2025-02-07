@@ -57,9 +57,10 @@
 #'                 umbral = 0.2)
 entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbral=0.3, eliminar=0.4) {
         df$ID = 1:nrow(df)
-        form = paste0(dependiente, " ~ ", paste(sub(".tif", "", independientes), collapse=' + '))
-        pred = raster::stack(independientes)
-        variable <- terra::extract(terra::rast(pred), terra::vect(df))
+        a <- paste0(dependiente, " ~ ", paste(trimws(basename(independientes)),collapse=" + "))
+        form = gsub(".tif", "", a)
+        pred = terra::rast(independientes)
+        variable <- terra::extract(pred, terra::vect(df))
         df = suppressMessages(dplyr::left_join(df, variable, by = "ID"))
         df = stats::na.omit(df)
         mapeSummary <- function (data, lev = NULL, model = NULL) {
@@ -89,17 +90,17 @@ entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbra
                 predicciones = predicciones[,c("rowIndex","pred","obs")]
                 predicciones$mape = abs(predicciones$pred - predicciones$obs) / predicciones$obs
                         if (mean(predicciones$mape) < umbral) {
-                          break
                           message("El entrenamiento ha finalizado.")
+                          break
                           }
                 predicciones = dplyr::rename(predicciones, id = rowIndex)
                 df_qrf = suppressMessages(dplyr::left_join(df_qrf, predicciones[,c("mape","id")]))
                 a = nrow(df_qrf)
-                df_qrf = subset(df_qrf, mape < eliminar)
+                df_qrf = subset(df_qrf, predicciones$mape  < eliminar)
                 message(paste0("El MAPE por el momento es igual a +/- ", round(mean(predicciones$mape)*100,2), "%. Se eliminarán ", nrow(df_qrf) - a, " observaciones. El proceso continúa con ", nrow(df_qrf), " datos."))
         }
         parallel::stopCluster(cl)
-        message(paste0("El proceso de entrenamiento del modelo ha finalizado. El MAPE resultó igual a +/- ", round(mean(predicciones$mape)*100,2), "%."))
+        message(paste0("El MAPE resultó igual a +/- ", round(mean(predicciones$mape)*100,2), "%."))
         df_qrf$condicion = "usado"
         df = suppressMessages(dplyr::left_join(df, df_qrf[,c("condicion","ID")]))
         df_utilizados = subset(df, condicion == "usado")
@@ -109,7 +110,7 @@ entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbra
         assign("datos_utilizados", df_utilizados, envir=globalenv())
         assign("datos_eliminados", df_eliminados, envir=globalenv())
         message("...realizando interpolación...")
-        vut = terra::interpolate(terra::rast(pred), qrf, na.rm = TRUE, wopt=list(steps=80))
+        vut = terra::interpolate(pred, qrf, na.rm = TRUE, wopt=list(steps=80))
         terra::plot(vut, breaks = terra::global(vut, quantile, probs = seq(0,1,0.1), na.rm=TRUE), smooth = TRUE)
         terra::writeRaster(vut, "vut.tif", overwrite = TRUE)
         save(qrf, file = "modelo.rda")

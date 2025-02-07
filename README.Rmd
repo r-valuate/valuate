@@ -47,16 +47,13 @@ Por ejemplo, si se desea conocer la distancia a la vía primaria más cercana en
 
 ```{r calcular_dist}
 # Definimos el área de estudio
-library(nominatimlite)
-library(osmdata)
-library(sf)
-area_de_estudio <- geo_lite_sf(address = "La Plata, Argentina", points_only = F)
-bbox = st_transform(area_de_estudio, 4326) |> st_bbox(bbox)
+area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = F)
+bbox = sf::st_transform(area_de_estudio, 4326) |> sf::st_bbox(bbox)
 
 # Descargamos las vias principales
-vias_prim <- opq(bbox) |>
-  add_osm_feature(key = "highway", value = "secondary") |>
-  osmdata_sf()
+vias_prim <- osmdata::opq(bbox) |>
+  osmdata::add_osm_feature(key = "highway", value = "secondary") |>
+  osmdata::osmdata_sf()
 vias_prim <- vias_prim$osm_lines
 
 # Calculamos un ráster con las distancias a la vía principal más cercana
@@ -72,16 +69,13 @@ Por ejemplo, si se desea conocer información sobre los espacios verdes en el ve
 
 ```{r calcular_entorno}
 # Definimos el área de estudio
-library(nominatimlite)
-library(osmdata)
-library(sf)
-area_de_estudio <- geo_lite_sf(address = "La Plata, Argentina", points_only = F)
-bbox = st_transform(area_de_estudio, 4326) |> st_bbox(bbox)
+area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = F)
+bbox = sf::st_transform(area_de_estudio, 4326) |> sf::st_bbox(bbox)
 
 # Descargamos los parques que se encuentran dentro del área de estudio
-plazas <- opq(bbox) |>
-  add_osm_feature(key = "leisure", value = "park") |>
-  osmdata_sf()
+plazas <- osmdata::opq(bbox) |>
+  osmdata::add_osm_feature(key = "leisure", value = "park") |>
+  osmdata::osmdata_sf()
 plazas <- plazas$osm_polygons
 
 # Calculamos un ráster que resume, para cada píxel las características del entorno
@@ -95,10 +89,8 @@ calcular_entorno(area = area_de_estudio,
 La función calcular_raster() devuelve un ráster que resume el cálculo realizado a partir de otro ráster, incluyendo fuentes de datos con diferente proyección y resolución espacial. La función permite readecuar las resoluciones y proyecciones de diferentes rásters a las utilizadas en el proyecto. Además, el paŕametro "entorno" permite realizar un cálculo del promedio de la variable bajo análisis en el vecindario definido por el usuario. Por ejemplo, si se desea readecuar a los criterios de un proyecto un ráster que informa sobre el porcentaje de edificaciones detectadas en un píxel a partir de una imagen satelital en la ciudad de Medellín (Colombia):
 
 ```{r calcular_raster}
-library(terra)
-original = rast("data/edificaciones.tif")
-library(sf)
-area_de_estudio = st_read("data/area.gpkg")
+original = terra::rast("inst/extdata/edificaciones.tif")
+area_de_estudio = sf::st_read("inst/extdata/area.gpkg")
 calcular_raster(original, area_de_estudio, dim = 50, entorno = 100, "prueba_raster")
 ```
 
@@ -142,24 +134,24 @@ La función está optimizada para aplicaciones que requieren análisis espaciale
 
 ```{r entrenar_modelo}
 # A continuación se presenta un ejemplo para la Ciudad de Medellín (Colombia), con sólo 500 datos.
-load("data/datos.Rda")
+load("data/datos.rda")
 
 entrenar_modelo(df = dat,
                 dependiente = "vut",
-                independientes = c("dist_basura.tif",
-                                   "dist_industria.tif",
-                                   "dist_plazas_parques.tif",
-                                   "dist_tren.tif",
-                                   "dist_vias_autopista.tif",
-                                   "dist_vias_prim.tif",
-                                   "dist_vias_sec.tif",
-                                   "entorno_altura.tif",
-                                   "entorno_plazas_parques.tif",
-                                   "entorno_comercios.tif",
-                                   "entorno_edificaciones.tif",
-                                   "entorno_hoteles.tif"),
+                independientes = c("inst/extdata/dist_basura.tif",
+                                   "inst/extdata/dist_industria.tif",
+                                   "inst/extdata/dist_plazas_parques.tif",
+                                   "inst/extdata/dist_tren.tif",
+                                   "inst/extdata/dist_vias_autopista.tif",
+                                   "inst/extdata/dist_vias_prim.tif",
+                                   "inst/extdata/dist_vias_sec.tif",
+                                   "inst/extdata/entorno_altura.tif",
+                                   "inst/extdata/entorno_plazas_parques.tif",
+                                   "inst/extdata/entorno_comercios.tif",
+                                   "inst/extdata/entorno_edificaciones.tif",
+                                   "inst/extdata/entorno_hoteles.tif"),
                 modelo = "qrf",
-                umbral = 0.2)
+                umbral = 0.3)
 ```
 
 Finalmente, la función simular_escenario() permite, a partir de la predicción de la distribución espacial de una variable, estimar escenarios a partir de la simulación de alteraciones en alguna (o algunas) de las variables independientes. La función devuelve un ráster que informa sobre el impacto en la variable dependiente de las simulaciones realizadas en las variables independientes. Permite estimar la magnitud y el alcance territorial de las modificaciones simuladas sobre la variable de estudio.

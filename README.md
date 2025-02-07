@@ -51,18 +51,13 @@ cercana en la ciudad de La Plata (Argentina):
 
 ``` r
 # Definimos el área de estudio
-library(nominatimlite)
-library(osmdata)
-#> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
-library(sf)
-#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE
-area_de_estudio <- geo_lite_sf(address = "La Plata, Argentina", points_only = F)
-bbox = st_transform(area_de_estudio, 4326) |> st_bbox(bbox)
+area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = F)
+bbox = sf::st_transform(area_de_estudio, 4326) |> sf::st_bbox(bbox)
 
 # Descargamos las vias principales
-vias_prim <- opq(bbox) |>
-  add_osm_feature(key = "highway", value = "secondary") |>
-  osmdata_sf()
+vias_prim <- osmdata::opq(bbox) |>
+  osmdata::add_osm_feature(key = "highway", value = "secondary") |>
+  osmdata::osmdata_sf()
 vias_prim <- vias_prim$osm_lines
 
 # Calculamos un ráster con las distancias a la vía principal más cercana
@@ -96,16 +91,13 @@ en el vecindario en la ciudad de La Plata (Argentina):
 
 ``` r
 # Definimos el área de estudio
-library(nominatimlite)
-library(osmdata)
-library(sf)
-area_de_estudio <- geo_lite_sf(address = "La Plata, Argentina", points_only = F)
-bbox = st_transform(area_de_estudio, 4326) |> st_bbox(bbox)
+area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = F)
+bbox = sf::st_transform(area_de_estudio, 4326) |> sf::st_bbox(bbox)
 
 # Descargamos los parques que se encuentran dentro del área de estudio
-plazas <- opq(bbox) |>
-  add_osm_feature(key = "leisure", value = "park") |>
-  osmdata_sf()
+plazas <- osmdata::opq(bbox) |>
+  osmdata::add_osm_feature(key = "leisure", value = "park") |>
+  osmdata::osmdata_sf()
 plazas <- plazas$osm_polygons
 
 # Calculamos un ráster que resume, para cada píxel las características del entorno
@@ -135,13 +127,10 @@ edificaciones detectadas en un píxel a partir de una imagen satelital en
 la ciudad de Medellín (Colombia):
 
 ``` r
-library(terra)
-#> terra 1.8.9
-original = rast("data/edificaciones.tif")
-library(sf)
-area_de_estudio = st_read("data/area.gpkg")
+original = terra::rast("inst/extdata/edificaciones.tif")
+area_de_estudio = sf::st_read("inst/extdata/area.gpkg")
 #> Reading layer `area' from data source 
-#>   `/home/juan/Documentos/GitHub/valuate/valuate/data/area.gpkg' 
+#>   `/home/juan/Documentos/GitHub/valuate/valuate/inst/extdata/area.gpkg' 
 #>   using driver `GPKG'
 #> Simple feature collection with 1 feature and 1 field
 #> Geometry type: POLYGON
@@ -149,7 +138,6 @@ area_de_estudio = st_read("data/area.gpkg")
 #> Bounding box:  xmin: -75.66658 ymin: 6.066645 xmax: -75.49011 ymax: 6.367076
 #> Geodetic CRS:  WGS 84
 calcular_raster(original, area_de_estudio, dim = 50, entorno = 100, "prueba_raster")
-#> |---------|---------|---------|---------|=========================================                                          
 ```
 
 <img src="man/figures/README-calcular_raster-1.png" width="100%" />
@@ -260,27 +248,27 @@ mediante las librerías ‘sf’ y ‘raster’.
 
 ``` r
 # A continuación se presenta un ejemplo para la Ciudad de Medellín (Colombia), con sólo 500 datos.
-load("data/datos.Rda")
+load("data/datos.rda")
 
 entrenar_modelo(df = dat,
                 dependiente = "vut",
-                independientes = c("dist_basura.tif",
-                                   "dist_industria.tif",
-                                   "dist_plazas_parques.tif",
-                                   "dist_tren.tif",
-                                   "dist_vias_autopista.tif",
-                                   "dist_vias_prim.tif",
-                                   "dist_vias_sec.tif",
-                                   "entorno_altura.tif",
-                                   "entorno_plazas_parques.tif",
-                                   "entorno_comercios.tif",
-                                   "entorno_edificaciones.tif",
-                                   "entorno_hoteles.tif"),
+                independientes = c("inst/extdata/dist_basura.tif",
+                                   "inst/extdata/dist_industria.tif",
+                                   "inst/extdata/dist_plazas_parques.tif",
+                                   "inst/extdata/dist_tren.tif",
+                                   "inst/extdata/dist_vias_autopista.tif",
+                                   "inst/extdata/dist_vias_prim.tif",
+                                   "inst/extdata/dist_vias_sec.tif",
+                                   "inst/extdata/entorno_altura.tif",
+                                   "inst/extdata/entorno_plazas_parques.tif",
+                                   "inst/extdata/entorno_comercios.tif",
+                                   "inst/extdata/entorno_edificaciones.tif",
+                                   "inst/extdata/entorno_hoteles.tif"),
                 modelo = "qrf",
-                umbral = 0.2)
+                umbral = 0.3)
 #> ...entrenando modelo...
-#> El MAPE por el momento es igual a +/- 28.67%. Se eliminarán -89 observaciones. El proceso continúa con 389 datos.
-#> El proceso de entrenamiento del modelo ha finalizado. El MAPE resultó igual a +/- 14.46%.
+#> El entrenamiento ha finalizado.
+#> El MAPE resultó igual a +/- 28.67%.
 #> ...realizando interpolación...
 #> |---------|---------|---------|---------|=========================================                                          
 ```
