@@ -73,16 +73,19 @@ entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbra
                                           summaryFunction = mapeSummary,
                                           savePredictions = 'final',
                                           allowParallel = !(Sys.getenv("GITHUB_ACTIONS") == "true"))
+
         if (Sys.getenv("GITHUB_ACTIONS") == "true") {
-          cores <- 1  # Solo usa 1 núcleo en GitHub Actions
+          num_cores <- 1  # Solo usa 1 núcleo en GitHub Actions
+        } else {
+          num_cores <- parallel::detectCores()
         }
-        cores <- parallel::detectCores()
-        cl <- parallel::makeCluster(cores)
+
+        cl <- parallel::makeCluster(num_cores)
         doParallel::registerDoParallel(cl)
-        cl <- parallel::makeCluster(cores[1])
-        doParallel::registerDoParallel(cl)
+
         df_qrf = sf::st_drop_geometry(df)
         message("...entrenando modelo...")
+
         repeat{
                 df_qrf$id = 1:nrow(df_qrf)
                 set.seed(11)
