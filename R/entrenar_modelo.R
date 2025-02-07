@@ -76,8 +76,8 @@ entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbra
         if (Sys.getenv("GITHUB_ACTIONS") == "true") {
           cores <- 1  # Solo usa 1 núcleo en GitHub Actions
         }
-          cores <- parallel::detectCores()
-        cl <- parallel::makeCluster(num_cores)
+        cores <- parallel::detectCores()
+        cl <- parallel::makeCluster(cores)
         doParallel::registerDoParallel(cl)
         cl <- parallel::makeCluster(cores[1])
         doParallel::registerDoParallel(cl)
