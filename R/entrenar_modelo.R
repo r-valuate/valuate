@@ -72,7 +72,7 @@ entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbra
         fitControl <- caret::trainControl(method = "cv", number = 10,
                                           summaryFunction = mapeSummary,
                                           savePredictions = 'final',
-                                          allowParallel = !(Sys.getenv("GITHUB_ACTIONS") == "true")))
+                                          allowParallel = !(Sys.getenv("GITHUB_ACTIONS") == "true"))
         cores <- parallel::detectCores()
         cl <- parallel::makeCluster(cores[1])
         doParallel::registerDoParallel(cl)
