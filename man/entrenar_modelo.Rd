@@ -43,7 +43,7 @@ Esta funcion permite entrenar modelos y cuantificar su error en la prediccion de
 }
 \examples{
 # A continuacion se presenta un ejemplo para la Ciudad de Medellin (Colombia), con solo 500 datos.
-load("data/datos.rda")
+data("datos", package = "valuate")
 
 entrenar_modelo(df = dat,
                 dependiente = "vut",
@@ -60,7 +60,7 @@ entrenar_modelo(df = dat,
                                    "inst/extdata/entorno_edificaciones.tif",
                                    "inst/extdata/entorno_hoteles.tif"),
                 modelo = "qrf",
-                umbral = 0.2)
+                umbral = 0.3)
 }
 \references{
 Kuhn, M. (2008). "Building Predictive Models in R Using the caret Package".

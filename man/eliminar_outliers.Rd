@@ -26,7 +26,7 @@ Esta funcion permite eliminar observaciones cuyo valor es muy diferente a los ob
 \examples{
 
 # Cargamos la base de datos
-load("resultado.rda")
+data("resultado", package = "valuate")
 
 # Se define la estimacion de observaciones atipicas a partir de la variable 'vut'
 # La distancia para el calculo es de 50 metros lineales. Esto define la extension del vecindario.

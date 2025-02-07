@@ -25,7 +25,7 @@ Esta funcion estima el valor de las observaciones muestrales expresado en termin
 }
 \examples{
 # Cargamos los datos correspondientes a una muestra de 1000 terrenos.
-load("data/terrenos.rda")
+data("terrenos", package = "valuate")
 
 # Se define como "lote tipico" a aquel que se corresponde a una operacion de
 # venta, realizada con escritura, y de una superficie igual a la mediana

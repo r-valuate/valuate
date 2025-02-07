@@ -37,7 +37,7 @@
 #'
 #' @examples
 #' # A continuacion se presenta un ejemplo para la Ciudad de Medellin (Colombia), con solo 500 datos.
-#' load("data/datos.rda")
+#' data("datos", package = "valuate")
 #'
 #' entrenar_modelo(df = dat,
 #'                 dependiente = "vut",
@@ -54,7 +54,7 @@
 #'                                    "inst/extdata/entorno_edificaciones.tif",
 #'                                    "inst/extdata/entorno_hoteles.tif"),
 #'                 modelo = "qrf",
-#'                 umbral = 0.2)
+#'                 umbral = 0.3)
 entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbral=0.3, eliminar=0.4) {
         df$ID = 1:nrow(df)
         a <- paste0(dependiente, " ~ ", paste(trimws(basename(independientes)),collapse=" + "))
