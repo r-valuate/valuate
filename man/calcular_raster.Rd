@@ -25,7 +25,7 @@ Esta funcion devuelve un raster que resume el calculo realizado a partir de otro
 }
 \examples{
 original = terra::rast(system.file("extdata/edificaciones.tif", package = "valuate"))
-area_de_estudio = sf::st_read("inst/extdata/area.gpkg")
+area_de_estudio <- sf::st_read(system.file("extdata/area.gpkg", package = "valuate"))
 calcular_raster(original, area_de_estudio, dim = 50, entorno = 100, "prueba_raster")
 }
 \author{
