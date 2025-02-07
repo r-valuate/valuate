@@ -16,7 +16,7 @@ test_that("calcular_dist genera un raster con CRS correcto", {
   nombre <- "test_raster"
 
   # Ejecutar la función y verificar que no genera errores
-  expect_message(calcular_dist(area, objeto, dim, nombre), "El proceso de cálculo ha finalizado")
+  expect_message(calcular_dist(area, objeto, dim, nombre), "El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre test_raster.tif. En el environment se ha creado el raster 'test_raster'.")
 
   # Verificar que la variable se creó en el entorno global
   expect_true(exists(nombre, envir = globalenv()))

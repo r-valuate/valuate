@@ -18,7 +18,7 @@ test_that("calcular_entorno genera un raster con CRS correcto", {
   nombre <- "test_entorno"
 
   # Ejecutar la función y verificar que genera la salida esperada
-  expect_output(calcular_entorno(area, objeto, dim, ext, nombre), "El proceso de cálculo ha finalizado")
+  expect_output(calcular_entorno(area, objeto, dim, ext, nombre), "El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre test_entorno.tif. En el environment se ha creado el raster 'test_entorno'.")
 
   # Verificar que la variable se creó en el entorno global
   expect_true(exists(nombre, envir = globalenv()))
@@ -55,5 +55,5 @@ test_that("calcular_entorno maneja geometrías no válidas", {
   nombre <- "test_entorno"
 
   expect_error(calcular_entorno(area, objeto_invalido, dim, ext, nombre),
-               "Error: El objeto provisto para el cálculo debe tener geometrías de clase 'POINT', 'POLYGON' o 'MULTIPOLYGON'.")
+               "Error: El objeto provisto para el calculo debe tener geometrias de clase 'POINT', 'POLYGON' o 'MULTIPOLYGON'.")
 })
