@@ -31,7 +31,7 @@
 calcular_entorno <- function(area, objeto, dim, ext, nombre){
   a = table(sf::st_geometry_type(objeto)) |> as.data.frame() |> dplyr::filter(Freq > 0)
   if(a$Var1 != "POINT" & a$Var1 != "POLYGON" & a$Var1 != "MULTIPOLYGON"){
-    stop("Error: El objeto provisto para el cálculo debe tener geometrías de clase 'POINT', 'POLYGON' o 'MULTIPOLYGON'.")
+    stop("Error: El objeto provisto para el calculo debe tener geometrias de clase 'POINT', 'POLYGON' o 'MULTIPOLYGON'.")
   }
   if(a$Var1 == "POLYGON" | a$Var1 == "MULTIPOLYGON"){
   area <- sf::st_transform(area, 3857)
@@ -63,7 +63,7 @@ calcular_entorno <- function(area, objeto, dim, ext, nombre){
   terra::plot(var, col = viridis::plasma(100), main = paste0("Variable: ", nombre))
   terra::writeRaster(var, paste0(nombre, ".tif"), overwrite = TRUE)
   assign(nombre, var, envir=globalenv())
-  print(paste0("El proceso de cálculo ha finalizado, y el raster resultante se gardó en el directorio de trabajo con el nombre ", nombre, ".tif. En el environment se ha creado el ráster '", nombre, "'."))
+  print(paste0("El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre ", nombre, ".tif. En el environment se ha creado el raster '", nombre, "'."))
   }
  else{
    area <- sf::st_transform(area, 3857)
@@ -96,6 +96,6 @@ calcular_entorno <- function(area, objeto, dim, ext, nombre){
    terra::plot(var, col = viridis::plasma(100), main = paste0("Variable: ", nombre))
    terra::writeRaster(var, paste0(nombre, ".tif"), overwrite = TRUE)
    assign(nombre, var, envir=globalenv())
-   print(paste0("El proceso de cálculo ha finalizado, y el raster resultante se gardó en el directorio de trabajo con el nombre ", nombre, ".tif. En el environment se ha creado el ráster '", nombre, "'."))
+   print(paste0("El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre ", nombre, ".tif. En el environment se ha creado el raster '", nombre, "'."))
  }
 }

@@ -5,7 +5,7 @@
 #' @param df Dataframe sobre el que se realizara el calculo. Debe ser un objeto de la libreria 'sf' con geometria 'POINT'.
 #' @param dependiente Nombre de la variable a estimar o variable dependiente.
 #' @param independientes Vector con los nombres de los rasters que contienen informacion sobre las variables independientes, generadas a partir de las funciones calcular_dist(), calcular_raster() o calcular_entorno().
-#' @param modelo Nombre del modelo a entrenar. Se corresponde con las abreviaciones previstas en la libreria 'caret' (Kuhn, 2008) (ver \link{https://topepo.github.io/caret/train-models-by-tag.html}). El valor por default ("qrf") se corresponde al modelo Quantile Regression Forest (Meinshausen, 2006).
+#' @param modelo Nombre del modelo a entrenar. Se corresponde con las abreviaciones previstas en la libreria 'caret' (Kuhn, 2008) (ver \url{https://topepo.github.io/caret/train-models-by-tag.html}). El valor por default ("qrf") se corresponde al modelo Quantile Regression Forest (Meinshausen, 2006).
 #' @param umbral Valor que define el error maximo permitido en la estimacion. La funcion evalua la precision fuera de la muestra mediante un proceso de validacion cruzada en 10 grupos. Para cada dato en la muestra se registra el error fuera de la muestra. Si el nivel de error agregado es superior al umbral definido, la funcion procede a eliminar los datos con un nivel de error mayor o igual al definido por el parametro 'eliminar' (ver abajo).
 #' @param eliminar Valor que define el nivel de error a partir del cual se depurara la muestra, siempre que el error general de estimacion se encuentre por encima del definido por el parametro 'umbral'.
 #'
@@ -23,7 +23,7 @@
 #'
 #' @references
 #' Kuhn, M. (2008). "Building Predictive Models in R Using the caret Package".
-#' \emph{Journal of Statistical Software}, \bold{28}(5), 93–115.
+#' \emph{Journal of Statistical Software}, \bold{28}(5), 93-115.
 #' https://doi.org/10.18637/jss.v028.i05
 #' Disponible en:
 #'   \url{https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1538-4632.1995.tb00338.x}.
@@ -75,8 +75,8 @@ entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbra
                                           allowParallel = !(Sys.getenv("GITHUB_ACTIONS") == "true"))
 
         if (Sys.getenv("GITHUB_ACTIONS") == "true") {
-          num_cores <- 1  # Solo usa 1 núcleo en GitHub Actions
-        } else {
+          num_cores <- 1
+          } else {
           num_cores <- parallel::detectCores()
         }
 
@@ -106,10 +106,10 @@ entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbra
                 df_qrf = suppressMessages(dplyr::left_join(df_qrf, predicciones[,c("mape","id")]))
                 a = nrow(df_qrf)
                 df_qrf = subset(df_qrf, predicciones$mape  < eliminar)
-                message(paste0("El MAPE por el momento es igual a +/- ", round(mean(predicciones$mape)*100,2), "%. Se eliminarán ", nrow(df_qrf) - a, " observaciones. El proceso continúa con ", nrow(df_qrf), " datos."))
+                message(paste0("El MAPE por el momento es igual a +/- ", round(mean(predicciones$mape)*100,2), "%. Se eliminaran ", nrow(df_qrf) - a, " observaciones. El proceso continua con ", nrow(df_qrf), " datos."))
         }
         parallel::stopCluster(cl)
-        message(paste0("El MAPE resultó igual a +/- ", round(mean(predicciones$mape)*100,2), "%."))
+        message(paste0("El MAPE fue igual a +/- ", round(mean(predicciones$mape)*100,2), "%."))
         df_qrf$condicion = "usado"
         df = suppressMessages(dplyr::left_join(df, df_qrf[,c("condicion","ID")]))
         df_utilizados = subset(df, condicion == "usado")
@@ -118,11 +118,11 @@ entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbra
         df_eliminados$condicion = NULL; df_eliminados$ID = NULL
         assign("datos_utilizados", df_utilizados, envir=globalenv())
         assign("datos_eliminados", df_eliminados, envir=globalenv())
-        message("...realizando interpolación...")
+        message("...realizando interpolacion...")
         vut = terra::interpolate(pred, qrf, na.rm = TRUE, wopt=list(steps=80))
         terra::plot(vut, breaks = terra::global(vut, quantile, probs = seq(0,1,0.1), na.rm=TRUE), smooth = TRUE)
         terra::writeRaster(vut, "vut.tif", overwrite = TRUE)
         save(qrf, file = "modelo.rda")
-        message("En el directorio de trabajo se ha guardado un ráster con la predicción, con el nombre 'vut.tif'.")
+        message("En el directorio de trabajo se ha guardado un raster con la prediccion, con el nombre 'vut.tif'.")
         message("En el directorio de trabajo se ha guardado un archivo con el modelo aplicado, con el nombre 'modelo.rda'.")
 }

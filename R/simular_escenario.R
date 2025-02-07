@@ -29,5 +29,5 @@ simular_escenario <- function(modelo, independientes, original){
   resultado <- raster::trim(resultado)
   terra::plot(resultado, smooth = TRUE)
   terra::writeRaster(resultado, "impacto.tif", overwrite=TRUE)
-  message("En el directorio de trabajo se ha guardado un ráster con el impacto de la simulación, con el nombre 'impacto.tif'.")
+  message("En el directorio de trabajo se ha guardado un raster con el impacto de la simulacion, con el nombre 'impacto.tif'.")
 }

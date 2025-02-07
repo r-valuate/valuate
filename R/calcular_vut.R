@@ -36,10 +36,10 @@ calcular_vut <- function(df, index, dependiente, independientes, dist) {
   df <- dplyr::rename(df, id = names(sf::st_drop_geometry(df[,index])))
   n <- nrow(df)
   df <- stats::na.omit(df)
-  if (nrow(df) < n) {message(paste0("Se eliminarán ", n - nrow(df), " observaciones con datos faltantes"))}
+  if (nrow(df) < n) {message(paste0("Se eliminaran ", n - nrow(df), " observaciones con datos faltantes"))}
   n <- nrow(df)
   df <- sf::st_difference(df)
-  if (nrow(df) < n) {message(paste0("Se eliminarán ", n - nrow(df), " observaciones con geometrías duplicadas"))}
+  if (nrow(df) < n) {message(paste0("Se eliminaran ", n - nrow(df), " observaciones con geometrias duplicadas"))}
   a <- sf::st_drop_geometry(df)
   a[sapply(a, is.character)] <- lapply(a[sapply(a, is.character)],
                                        as.factor)
@@ -63,16 +63,16 @@ calcular_vut <- function(df, index, dependiente, independientes, dist) {
   lw <- spdep::nb2listw(d, glist=idlist ,style="W" , zero.policy = TRUE)
   lm <- suppressMessages(spdep::lm.LMtests(ols, lw, test = c("RLMerr", "RLMlag", "SARMA"), zero.policy = TRUE))
   if (min(lm$SARMA$p.value, lm$RLMerr$p.value, lm$RLMlag$p.value) > 0.05) {
-    print("No corresponde realizar correcciones por dependencia espacial, se procede a aplicar el modelo estimado por mínimos cuadrados ordinarios.")
+    print("No corresponde realizar correcciones por dependencia espacial, se procede a aplicar el modelo estimado por minimos cuadrados ordinarios.")
   } else if (lm$SARMA$p.value <= 0.05) {
-    message("Se procederá a realizar correcciones por dependencia espacial aplicando un modelo SARMA.")
+    message("Se procedera a realizar correcciones por dependencia espacial aplicando un modelo SARMA.")
     message("Este proceso puede demorar varios minutos, dependiendo de la cantidad de observaciones en la muestra.")
     sac <- spatialreg::sacsarlm(ols, data = df, listw = lw, zero.policy = T, na.action = na.omit)
   } else if (which.min(c(lm$RLMlag$p.value, lm$RLMerr$p.value)) == 1) {
-    message("Se procederá a realizar correcciones por dependencia espacial aplicando un modelo de rezago espacial LAG.")
+    message("Se procedera a realizar correcciones por dependencia espacial aplicando un modelo de rezago espacial LAG.")
     sac <- spatialreg::lagsarlm(ols, data = df, listw = lw, zero.policy = T, na.action = na.omit)
   } else {
-    message("Se procederá a realizar correcciones por dependencia espacial aplicando un modelo de rezago del ERROR espacial.")
+    message("Se procedera a realizar correcciones por dependencia espacial aplicando un modelo de rezago del ERROR espacial.")
     sac <- spatialreg::errorsarlm(ols, data = df, listw = lw, zero.policy = T, na.action = na.omit)
   }
   if (sac$type %in% c("sac", "lag")) {
@@ -96,7 +96,7 @@ calcular_vut <- function(df, index, dependiente, independientes, dist) {
     impactos <- dplyr::rename(impactos, Efecto = Estimate,
                               `p-valor` = `Pr(>|z|)`)
   }
-  message("Se procederá a calcular el valor unitario de referencia...")
+  message("Se procedera a calcular el valor unitario de referencia...")
   dummy_cols <- function (.data, select_columns = NULL, remove_first_dummy = FALSE,
                           remove_most_frequent_dummy = FALSE, ignore_na = FALSE, split = NULL,
                           remove_selected_columns = FALSE, omit_colname_prefix = FALSE)
@@ -265,8 +265,8 @@ calcular_vut <- function(df, index, dependiente, independientes, dist) {
   graphics::hist(datos$vut, xlab = "VUT", main = "")
   datos <- dplyr::rename_at(datos, dplyr::vars(id), ~index)
   assign("resultado", datos, envir=globalenv())
-  message("El proceso de homogeneización ha finalizado. Se ha¨ agregado al entorno de trabajo un nuevo objeto que contiene la muestra original, más una nueva columna llamada 'vut', que contiene el precio reexpresado en términos homogéneos.")
-  message("Los efectos estadísticamene significativos fueron los siguientes:")
+  message("El proceso de homogeneizacion ha finalizado. Se ha agregado al entorno de trabajo un nuevo objeto que contiene la muestra original, mas una nueva columna llamada 'vut', que contiene el precio reexpresado en terminos homogeneos.")
+  message("Los efectos estadisticamene significativos fueron los siguientes:")
   return(kableExtra::kable(impactos))
 }
 

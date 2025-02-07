@@ -40,5 +40,5 @@ calcular_dist <- function(area, objeto, dim, nombre){
   terra::plot(var, col = viridis::plasma(100), main = paste0("Variable: ", nombre))
   terra::writeRaster(var, paste0(nombre, ".tif"), overwrite = TRUE)
   assign(nombre, var, envir=globalenv())
-  message(paste0("El proceso de cálculo ha finalizado, y el raster resultante se gardó en el directorio de trabajo con el nombre ", nombre, ".tif. En el environment se ha creado el ráster '", nombre, "'."))
+  message(paste0("El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre ", nombre, ".tif. En el environment se ha creado el raster '", nombre, "'."))
 }

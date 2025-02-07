@@ -20,7 +20,7 @@ entrenar_modelo(
 
 \item{independientes}{Vector con los nombres de los rasters que contienen informacion sobre las variables independientes, generadas a partir de las funciones calcular_dist(), calcular_raster() o calcular_entorno().}
 
-\item{modelo}{Nombre del modelo a entrenar. Se corresponde con las abreviaciones previstas en la libreria 'caret' (Kuhn, 2008) (ver \link{https://topepo.github.io/caret/train-models-by-tag.html}). El valor por default ("qrf") se corresponde al modelo Quantile Regression Forest (Meinshausen, 2006).}
+\item{modelo}{Nombre del modelo a entrenar. Se corresponde con las abreviaciones previstas en la libreria 'caret' (Kuhn, 2008) (ver \url{https://topepo.github.io/caret/train-models-by-tag.html}). El valor por default ("qrf") se corresponde al modelo Quantile Regression Forest (Meinshausen, 2006).}
 
 \item{umbral}{Valor que define el error maximo permitido en la estimacion. La funcion evalua la precision fuera de la muestra mediante un proceso de validacion cruzada en 10 grupos. Para cada dato en la muestra se registra el error fuera de la muestra. Si el nivel de error agregado es superior al umbral definido, la funcion procede a eliminar los datos con un nivel de error mayor o igual al definido por el parametro 'eliminar' (ver abajo).}
 
@@ -64,7 +64,7 @@ entrenar_modelo(df = dat,
 }
 \references{
 Kuhn, M. (2008). "Building Predictive Models in R Using the caret Package".
-\emph{Journal of Statistical Software}, \bold{28}(5), 93–115.
+\emph{Journal of Statistical Software}, \bold{28}(5), 93-115.
 https://doi.org/10.18637/jss.v028.i05
 Disponible en:
   \url{https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1538-4632.1995.tb00338.x}.

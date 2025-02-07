@@ -31,5 +31,5 @@ calcular_raster <- function(raster, area, dim, entorno=0, nombre){
         a = raster::resample(raster::raster(raster), raster::raster(r), method='bilinear')
         terra::plot(a, col = viridis::plasma(100), main = paste0("Variable: ", nombre))
         terra::writeRaster(a, paste0(nombre, ".tif"), overwrite = TRUE)
-        message(paste0("El proceso de cálculo ha finalizado, y el raster resultante se guardó en el directorio de trabajo con el nombre ", nombre, ".tif. En el environment se ha creado el ráster '", nombre, "'."))
+        message(paste0("El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre ", nombre, ".tif. En el environment se ha creado el raster '", nombre, "'."))
 }

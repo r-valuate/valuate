@@ -45,8 +45,8 @@ eliminar_outliers(df = resultado,
                   moran = TRUE)
 }
 \references{
-Anselin, L. (1995). Local Indicators of Spatial Association—LISA.
-\emph{Geographical Analysis}, \bold{27}(2), 93–115.
+Anselin, L. (1995). Local Indicators of Spatial Association - LISA.
+\emph{Geographical Analysis}, \bold{27}(2), 93-115.
 \doi{10.1111/j.1538-4632.1995.tb00338.x}. Disponible en:
 \url{https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1538-4632.1995.tb00338.x}.
 }

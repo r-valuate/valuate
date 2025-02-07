@@ -11,8 +11,8 @@
 #' @return La funcion permite identificar valores que son muy diferentes a los observados en el entorno. Para ello, compara el valor de cada observacion con el promedio del entorno (ponderado por la distancia, mediante la construccion de una matriz de pesos espaciales). Tambien permite identificar outliers espaciales mediante el calculo del indice de Moran local, siguiendo a Anselin (1995).
 #' @export
 #' @references
-#' Anselin, L. (1995). Local Indicators of Spatial Association—LISA.
-#' \emph{Geographical Analysis}, \bold{27}(2), 93–115.
+#' Anselin, L. (1995). Local Indicators of Spatial Association - LISA.
+#' \emph{Geographical Analysis}, \bold{27}(2), 93-115.
 #' \doi{10.1111/j.1538-4632.1995.tb00338.x}. Disponible en:
 #' \url{https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1538-4632.1995.tb00338.x}.
 #' @examples
@@ -46,7 +46,7 @@ eliminar_outliers <- function(df, dist, variable, umbral, moran) {
           moran = as.data.frame(spdep::localmoran(df[[variable]], lw, zero.policy = TRUE))
           moran$drop = ifelse(moran$Ii < 0 & moran$`Pr(z != E(Ii))` < 0.05, "drop", "no drop")
           df$drop = moran$drop
-          print(paste0("Se eliminaron ", nrow(subset(df, df$drop == "drop")), " observaciones espacialmente atípicas calculadas mediante el índice de Moran local. Se creó un objeto en el environment llamado 'depurados' que contiene la base de datos original sin los outliers."))
+          print(paste0("Se eliminaron ", nrow(subset(df, df$drop == "drop")), " observaciones espacialmente atipicas calculadas mediante el indice de Moran local. Se ha creado un objeto en el environment llamado 'depurados' que contiene la base de datos original sin los outliers."))
           df = subset(df, drop == "no drop")
           df$drop = NULL
   }
@@ -56,7 +56,7 @@ eliminar_outliers <- function(df, dist, variable, umbral, moran) {
                            ifelse(df[[variable]] / t(df[[variable]] %*% t(w)) > (1 + umbral) |
                              df[[variable]] / t(df[[variable]] %*% t(w)) < (1 - umbral), "drop", "no drop"))
           table(df$drop)
-          print(paste0("Se eliminaron ", nrow(subset(df, df$drop == "drop")), " observaciones espacialmente atípicas calculadas mediante el índice de Moran local. Se creó un objeto en el environment llamado 'depurados' que contiene la base de datos original sin los outliers."))
+          print(paste0("Se eliminaron ", nrow(subset(df, df$drop == "drop")), " observaciones espacialmente atipicas calculadas mediante el indice de Moran local. Se ha creado un objeto en el environment llamado 'depurados' que contiene la base de datos original sin los outliers."))
           df = subset(df, drop == "no drop")
           df$drop = NULL
           assign("depurados", df, envir=globalenv())
