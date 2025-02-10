@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+<img src="man/figures/logo.png" align="right" width="120" />
+
 # Valuate
 
 <!-- badges: start -->
@@ -69,7 +71,7 @@ calcular_dist(area = area_de_estudio,
 
 <img src="man/figures/README-calcular_dist-1.png" width="100%" />
 
-    #> El proceso de cálculo ha finalizado, y el raster resultante se gardó en el directorio de trabajo con el nombre vias.tif. En el environment se ha creado el ráster 'vias'.
+    #> El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre vias.tif. En el environment se ha creado el raster 'vias'.
 
 La función calcular_entorno() resume las características de un entorno
 definido por el usuario, a partir de capas geográficas vectoriales de
@@ -113,7 +115,7 @@ calcular_entorno(area = area_de_estudio,
 
 <img src="man/figures/README-calcular_entorno-1.png" width="100%" />
 
-    #> [1] "El proceso de cálculo ha finalizado, y el raster resultante se gardó en el directorio de trabajo con el nombre plazas_entorno.tif. En el environment se ha creado el ráster 'plazas_entorno'."
+    #> [1] "El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre plazas_entorno.tif. En el environment se ha creado el raster 'plazas_entorno'."
 
 La función calcular_raster() devuelve un ráster que resume el cálculo
 realizado a partir de otro ráster, incluyendo fuentes de datos con
@@ -142,7 +144,7 @@ calcular_raster(original, area_de_estudio, dim = 50, entorno = 100, "prueba_rast
 
 <img src="man/figures/README-calcular_raster-1.png" width="100%" />
 
-    #> El proceso de cálculo ha finalizado, y el raster resultante se guardó en el directorio de trabajo con el nombre prueba_raster.tif. En el environment se ha creado el ráster 'prueba_raster'.
+    #> El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre prueba_raster.tif. En el environment se ha creado el raster 'prueba_raster'.
 
 La función calcular_vut() estima el valor de las obervaciones muestrales
 expresado en términos homogéneos o comparables. La función estima el
@@ -181,16 +183,16 @@ calcular_vut(df = terrenos,
                                 "situacion_juridica" = "Con Escritura"),
              dependiente = "valor_m2",
              dist = 500)
-#> Se eliminarán 1 observaciones con datos faltantes
-#> Se procederá a realizar correcciones por dependencia espacial aplicando un modelo SARMA.
+#> Se eliminaran 1 observaciones con datos faltantes
+#> Se procedera a realizar correcciones por dependencia espacial aplicando un modelo SARMA.
 #> Este proceso puede demorar varios minutos, dependiendo de la cantidad de observaciones en la muestra.
-#> Se procederá a calcular el valor unitario de referencia...
+#> Se procedera a calcular el valor unitario de referencia...
 ```
 
 <img src="man/figures/README-calcular_vut-1.png" width="100%" />
 
-    #> El proceso de homogeneización ha finalizado. Se ha¨ agregado al entorno de trabajo un nuevo objeto que contiene la muestra original, más una nueva columna llamada 'vut', que contiene el precio reexpresado en términos homogéneos.
-    #> Los efectos estadísticamene significativos fueron los siguientes:
+    #> El proceso de homogeneizacion ha finalizado. Se ha agregado al entorno de trabajo un nuevo objeto que contiene la muestra original, mas una nueva columna llamada 'vut', que contiene el precio reexpresado en terminos homogeneos.
+    #> Los efectos estadisticamene significativos fueron los siguientes:
 
 | Variable                              |   p-valor |     Efecto |
 |:--------------------------------------|----------:|-----------:|
@@ -268,14 +270,14 @@ entrenar_modelo(df = dat,
                 umbral = 0.3)
 #> ...entrenando modelo...
 #> El entrenamiento ha finalizado.
-#> El MAPE resultó igual a +/- 28.67%.
-#> ...realizando interpolación...
+#> El MAPE fue igual a +/- 28.67%.
+#> ...realizando interpolacion...
 #> |---------|---------|---------|---------|=========================================                                          
 ```
 
 <img src="man/figures/README-entrenar_modelo-1.png" width="100%" />
 
-    #> En el directorio de trabajo se ha guardado un ráster con la predicción, con el nombre 'vut.tif'.
+    #> En el directorio de trabajo se ha guardado un raster con la prediccion, con el nombre 'vut.tif'.
     #> En el directorio de trabajo se ha guardado un archivo con el modelo aplicado, con el nombre 'modelo.rda'.
 
 Finalmente, la función simular_escenario() permite, a partir de la

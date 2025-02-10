@@ -1,8 +1,12 @@
 ---
 output: github_document
+badges:
+  badge: "man/figures/logo.png"
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+<img src="man/figures/logo.png" align="right" width="120" />
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
