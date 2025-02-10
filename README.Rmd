@@ -1,12 +1,10 @@
 ---
 output: github_document
-badges:
-  badge: "man/figures/logo.png"
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<img src="man/figures/logo.png" align="right" width="120" style="margin-top: -50px; z-index: 1;" />
+
 
 
 ```{r setup, include = FALSE}
@@ -24,6 +22,8 @@ library(valuate)
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/carranzajuanp/valuate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/carranzajuanp/valuate/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
+
+<img src="man/figures/logo.png" align="right" width="120" style="margin-top: -50px; z-index: 1;" />
 
 Este paquete provee una serie de funciones orientadas a facilitar el proceso de valuación de inmuebles, siguiendo el desarrollo de Carranza & Eguino Lijeron (2025). Sin embargo, puede ser también de utilidad para la predicción de la distribución espacial de cualquier tipo de fenómeno geográfico.
 

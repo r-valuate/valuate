@@ -1,14 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<img src="man/figures/logo.png" align="right" width="120" style="margin-top: -50px; z-index: 1;" />
-
 # Valuate
 
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/carranzajuanp/valuate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/carranzajuanp/valuate/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
+
+<img src="man/figures/logo.png" align="right" width="120" style="margin-top: -50px; z-index: 1;" />
 
 Este paquete provee una serie de funciones orientadas a facilitar el
 proceso de valuación de inmuebles, siguiendo el desarrollo de Carranza &
