@@ -40,7 +40,7 @@ Para instalar la versión de desarrollo de esta librería en la consola de
 R se debe ejecutar el siguiente código:
 
 ``` r
-remotes::install_github("carranzajuanp/valuate")
+remotes::install_github("r-valuate/valuate")
 ```
 
 ## Contenidos
