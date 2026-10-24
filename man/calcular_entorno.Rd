@@ -24,6 +24,7 @@ Cuando se le provee un objeto espacial "sf" con geometria "POLYGON" o "MULTIPOLY
 Esta funcion devuelve un raster que resume las caracteristicas del vecindario a partir de capas geograficas vectoriales de poligonos o de puntos.
 }
 \examples{
+\dontrun{
 # Definimos el area de estudio
 area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = FALSE)
 bbox = sf::st_transform(area_de_estudio, 4326) |> sf::st_bbox(bbox)
@@ -40,6 +41,7 @@ calcular_entorno(area = area_de_estudio,
                  objeto = plazas,
                  dim = 50,
                  nombre = "plazas_entorno")
+}
 }
 \author{
 Juan Pablo Carranza

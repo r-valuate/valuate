@@ -22,6 +22,7 @@ Se genera un raster que informa, para cada pixel, sobre la distancia (en metros 
 Esta funcion devuelve un raster con las distancias euclidianas, en metros, desde cada pixel hacia el objeto vectorial mas cercano.
 }
 \examples{
+\dontrun{
 # Definimos el area de estudio
 area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = FALSE)
 bbox = sf::st_transform(area_de_estudio, 4326) |> sf::st_bbox(bbox)
@@ -37,6 +38,7 @@ calcular_dist(area = area_de_estudio,
               objeto = vias_prim,
               dim = 50,
               nombre = "vias")
+}
 }
 \author{
 Juan Pablo Carranza
