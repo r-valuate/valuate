@@ -1,4 +1,4 @@
-
+<img width="1017" height="547" alt="image" src="https://github.com/user-attachments/assets/f7bcfdfd-1c22-41f0-a83a-2115d65e0454" />
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # Valuate
@@ -11,8 +11,7 @@
 <img src="man/figures/logo.png" align="right" width="120" style="margin-top: -50px; z-index: 1;" />
 
 Este paquete provee una serie de funciones orientadas a facilitar el
-proceso de valuación de inmuebles, siguiendo el desarrollo de Carranza &
-Eguino Lijeron (2025). Sin embargo, puede ser también de utilidad para
+proceso de valuación de inmuebles, siguiendo el desarrollo de [Eguino & Carranza (2025)](https://publications.iadb.org/es/ciencia-de-datos-finanzas-locales-y-gestion-territorial-modelos-de-valuacion-simulaciones-y-codigo). Sin embargo, puede ser también de utilidad para
 la predicción de la distribución espacial de cualquier tipo de fenómeno
 geográfico.
 
