@@ -11,6 +11,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # Definimos el area de estudio
 #' area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = FALSE)
 #' bbox = sf::st_transform(area_de_estudio, 4326) |> sf::st_bbox(bbox)
@@ -26,6 +27,7 @@
 #'               objeto = vias_prim,
 #'               dim = 50,
 #'               nombre = "vias")
+#' }
 calcular_dist <- function(area, objeto, dim, nombre){
   area <- sf::st_transform(area, 3857)
   objeto <- suppressWarnings(sf::st_transform(objeto, 3857))

@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # Definimos el area de estudio
 #' area_de_estudio <- nominatimlite::geo_lite_sf(address = "La Plata, Argentina", points_only = FALSE)
 #' bbox = sf::st_transform(area_de_estudio, 4326) |> sf::st_bbox(bbox)
@@ -28,6 +29,7 @@
 #'                  objeto = plazas,
 #'                  dim = 50,
 #'                  nombre = "plazas_entorno")
+#' }
 calcular_entorno <- function(area, objeto, dim, ext, nombre){
   a = table(sf::st_geometry_type(objeto)) |> as.data.frame() |> dplyr::filter(Freq > 0)
   if(a$Var1 != "POINT" & a$Var1 != "POLYGON" & a$Var1 != "MULTIPOLYGON"){
