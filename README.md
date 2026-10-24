@@ -4,7 +4,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/carranzajuanp/valuate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/carranzajuanp/valuate/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/r-valuate/valuate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-valuate/valuate/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 <img src="man/figures/logo.png" align="right" width="120" style="margin-top: -50px; z-index: 1;" />
