@@ -1,4 +1,3 @@
-<img width="1017" height="547" alt="image" src="https://github.com/user-attachments/assets/f7bcfdfd-1c22-41f0-a83a-2115d65e0454" />
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # Valuate
