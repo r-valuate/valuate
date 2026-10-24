@@ -290,10 +290,9 @@ sobre la variable de estudio.
 
 ## Referencias
 
-Carranza J.P. & Eguino Lijeron J.H. (2025). “Handbook for mass valuation
-policies”. Internarional Development Bank. Washington, DC.
+Eguino, H., & Carranza, J. P. (2025). Ciencia de datos, finanzas locales y gestión territorial: modelos de valuación, simulaciones y código abierto para la gestión fiscal y el financiamiento urbano. https://doi.org/10.18235/0013669
 
 Carranza, J.P. (2024). “Inteligencia artificial aplicada a políticas de
 valuación masiva de la tierra urbana”. Tesis de Doctorado en
 Administración y Política Pública. IIFAP, Facultad de Ciencias Sociales,
-Universidad Nacional de Córdoba. Córdoba, Argentina.
+Universidad Nacional de Córdoba. Córdoba, Argentina. https://dialnet.unirioja.es/servlet/tesis?codigo=374854
