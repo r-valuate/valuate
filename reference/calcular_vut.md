@@ -1,0 +1,91 @@
+# Homogeneizacion del precio de mercado de los inmuebles
+
+Esta funcion estima el valor de las observaciones muestrales expresado
+en terminos homogeneos o comparables.
+
+## Usage
+
+``` r
+calcular_vut(df, index, dependiente, independientes, dist)
+```
+
+## Arguments
+
+- df:
+
+  Objeto 'sf' con geometria 'POINT'. Muestra georreferenciada con
+  precios de la tierra cuyo valor se pretende expresar en terminos
+  homogeneos.
+
+- index:
+
+  Identificador unico para cada variable.
+
+- dependiente:
+
+  Nombre de la variable dependiente, aquella que contiene el precio por
+  metro cuadrado.
+
+- independientes:
+
+  Vector con los nombres de las columnas a utilizarse como variables
+  independientes, y el valor de referencia correspondiente a un "lote
+  tipico". Si las variables son numericas se debe indicar si el ajuste a
+  un lote tipico debe tomar como referencia la media o la mediana de
+  dicha variable. En el caso de ser variables categoricas, se debe
+  indicar el nombre de la categoria a tomarse como referencia. Ver
+  ejemplo abajo.
+
+- dist:
+
+  Distancia que define el vecindario sobre el que se realizara la
+  correccion por dependencia espacial.
+
+## Value
+
+Una lista con dos elementos: `datos`, la muestra original (objeto 'sf')
+con dos columnas nuevas, `vut` (precio homogeneizado) y `coef`
+(coeficiente de homogeneizacion aplicado); y `efectos`, una tabla con
+los efectos estadisticamente significativos de cada variable. La lista
+se devuelve de forma invisible, y la tabla de efectos se imprime en la
+consola. La funcion estima el precio por metro cuadrado homogeneizado,
+siguiendo a Carranza (2024). Toma como input un objeto espacial 'sf' y
+ajusta coeficientes de correccion segun diferentes variables definidas
+por el usuario para reexpresar el precio en termino de un 'lote tipico'
+para el area de estudio. Se informa, ademas, el parametro de ajuste
+estimado por el modelo lineal para cada una de las variables
+independientes involucradas en el proceso de homogeneizacion.
+
+## Author
+
+Juan Pablo Carranza
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+# Cargamos los datos correspondientes a una muestra de 1000 terrenos.
+data("terrenos", package = "valuate")
+
+# Se define como "lote tipico" a aquel que se corresponde a una operacion de
+# venta, realizada con escritura, y de una superficie igual a la mediana
+# de los lotes de la ciudad.
+# Se indica que la variable que informa sobre el precio por metro cuadrado
+# es "valor_m2".
+# Se define al vecindario en base a una distancia euclidiana de 500 metros.
+
+vut <- calcular_vut(df = terrenos,
+                    index = "id",
+                    independientes = c("tipo_valor" = "Venta",
+                                       "superficie" = "mediana",
+                                       "situacion_juridica" = "Con Escritura"),
+                    dependiente = "valor_m2",
+                    dist = 500)
+
+# Muestra con el precio homogeneizado
+vut$datos
+
+# Efectos estimados
+vut$efectos
+} # }
+```
