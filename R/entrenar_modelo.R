@@ -72,11 +72,7 @@ entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbra
                                           savePredictions = 'final',
                                           allowParallel = !(Sys.getenv("GITHUB_ACTIONS") == "true"))
 
-        if (Sys.getenv("GITHUB_ACTIONS") == "true") {
-          num_cores <- 1
-          } else {
-          num_cores <- parallel::detectCores()
-        }
+        num_cores <- nucleos_a_usar()
 
         cl <- parallel::makeCluster(num_cores)
         doParallel::registerDoParallel(cl)
@@ -100,11 +96,15 @@ entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbra
                           message("El entrenamiento ha finalizado.")
                           break
                           }
-                predicciones = dplyr::rename(predicciones, id = rowIndex)
-                df_qrf = suppressMessages(dplyr::left_join(df_qrf, predicciones[,c("mape","id")]))
-                a = nrow(df_qrf)
-                df_qrf = subset(df_qrf, predicciones$mape  < eliminar)
-                message(paste0("El MAPE por el momento es igual a +/- ", round(mean(predicciones$mape)*100,2), "%. Se eliminaran ", nrow(df_qrf) - a, " observaciones. El proceso continua con ", nrow(df_qrf), " datos."))
+                # Error de cada observacion, en el mismo orden que las filas de df_qrf
+                mape_obs = predicciones$mape[order(predicciones$rowIndex)]
+                conservar = mape_obs < eliminar
+                if (all(conservar)) {
+                  message(paste0("El MAPE es igual a +/- ", round(mean(predicciones$mape)*100,2), "%, superior al umbral, pero no quedan observaciones con un error mayor o igual a ", eliminar, ". El proceso se detiene."))
+                  break
+                }
+                df_qrf = df_qrf[conservar, ]
+                message(paste0("El MAPE por el momento es igual a +/- ", round(mean(predicciones$mape)*100,2), "%. Se eliminaron ", sum(!conservar), " observaciones. El proceso continua con ", nrow(df_qrf), " datos."))
         }
         parallel::stopCluster(cl)
         message(paste0("El MAPE fue igual a +/- ", round(mean(predicciones$mape)*100,2), "%."))
@@ -123,4 +123,10 @@ entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbra
         message("En el directorio de trabajo se ha guardado un archivo con el modelo aplicado, con el nombre 'modelo.rda'.")
         return(invisible(list(prediccion = vut, modelo = qrf,
                               utilizados = df_utilizados, eliminados = df_eliminados)))
+}
+
+# Cantidad de nucleos para el entrenamiento en paralelo. En GitHub Actions se
+# usa uno solo, para evitar problemas con la paralelizacion en esas maquinas.
+nucleos_a_usar <- function() {
+  if (Sys.getenv("GITHUB_ACTIONS") == "true") 1L else parallel::detectCores()
 }
