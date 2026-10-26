@@ -1,5 +1,38 @@
 # Changelog
 
+## valuate 0.2.1
+
+### Correcciones
+
+- [`entrenar_modelo()`](https://r-valuate.github.io/valuate/reference/entrenar_modelo.md):
+  cuando el error superaba el umbral, el proceso de depuración eliminaba
+  observaciones equivocadas (no necesariamente las de error alto),
+  porque comparaba los errores en un orden distinto al de los datos.
+  Ahora se eliminan exactamente las observaciones con error mayor o
+  igual a `eliminar`. Esto puede cambiar los resultados obtenidos con
+  versiones anteriores cuando el ciclo de depuración se activaba.
+- [`entrenar_modelo()`](https://r-valuate.github.io/valuate/reference/entrenar_modelo.md):
+  si el error sigue por encima del umbral pero ya no quedan
+  observaciones para eliminar, el proceso se detiene con un mensaje en
+  lugar de repetirse indefinidamente. El mensaje informa correctamente
+  la cantidad de observaciones eliminadas en cada vuelta.
+- [`calcular_vut()`](https://r-valuate.github.io/valuate/reference/calcular_vut.md):
+  con versiones recientes de `spdep` (1.3-3 o posteriores), que
+  renombraron los tests robustos a `adjRSerr` y `adjRSlag`, la función
+  nunca elegía los modelos LAG ni de error espacial: cuando el test
+  SARMA no era significativo aplicaba siempre mínimos cuadrados
+  ordinarios. Ahora funciona con ambas versiones de `spdep`.
+
+### Otros cambios
+
+- [`calcular_vut()`](https://r-valuate.github.io/valuate/reference/calcular_vut.md)
+  usa una función interna más simple para crear las variables
+  indicadoras, en lugar de una copia de `fastDummies::dummy_cols()`. Los
+  resultados son idénticos.
+- Cobertura de tests del 100%, incluidos los modelos LAG y de error
+  espacial de
+  [`calcular_vut()`](https://r-valuate.github.io/valuate/reference/calcular_vut.md).
+
 ## valuate 0.2.0
 
 ### Cambios que afectan el uso del paquete

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">valuate</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,6 +31,24 @@
       <small>Source: <a href="https://github.com/r-valuate/valuate/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.1" id="valuate-021">valuate 0.2.1<a class="anchor" aria-label="anchor" href="#valuate-021"></a></h2>
+<div class="section level3">
+<h3 id="correcciones-0-2-1">Correcciones<a class="anchor" aria-label="anchor" href="#correcciones-0-2-1"></a></h3>
+<ul><li>
+<code><a href="../reference/entrenar_modelo.html">entrenar_modelo()</a></code>: cuando el error superaba el umbral, el proceso de depuración eliminaba observaciones equivocadas (no necesariamente las de error alto), porque comparaba los errores en un orden distinto al de los datos. Ahora se eliminan exactamente las observaciones con error mayor o igual a <code>eliminar</code>. Esto puede cambiar los resultados obtenidos con versiones anteriores cuando el ciclo de depuración se activaba.</li>
+<li>
+<code><a href="../reference/entrenar_modelo.html">entrenar_modelo()</a></code>: si el error sigue por encima del umbral pero ya no quedan observaciones para eliminar, el proceso se detiene con un mensaje en lugar de repetirse indefinidamente. El mensaje informa correctamente la cantidad de observaciones eliminadas en cada vuelta.</li>
+<li>
+<code><a href="../reference/calcular_vut.html">calcular_vut()</a></code>: con versiones recientes de <code>spdep</code> (1.3-3 o posteriores), que renombraron los tests robustos a <code>adjRSerr</code> y <code>adjRSlag</code>, la función nunca elegía los modelos LAG ni de error espacial: cuando el test SARMA no era significativo aplicaba siempre mínimos cuadrados ordinarios. Ahora funciona con ambas versiones de <code>spdep</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="otros-cambios-0-2-1">Otros cambios<a class="anchor" aria-label="anchor" href="#otros-cambios-0-2-1"></a></h3>
+<ul><li>
+<code><a href="../reference/calcular_vut.html">calcular_vut()</a></code> usa una función interna más simple para crear las variables indicadoras, en lugar de una copia de <code>fastDummies::dummy_cols()</code>. Los resultados son idénticos.</li>
+<li>Cobertura de tests del 100%, incluidos los modelos LAG y de error espacial de <code><a href="../reference/calcular_vut.html">calcular_vut()</a></code>.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="valuate-020">valuate 0.2.0<a class="anchor" aria-label="anchor" href="#valuate-020"></a></h2>
 <div class="section level3">
