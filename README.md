@@ -1,6 +1,6 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Valuate
+# Valuate <img src="man/figures/logo.png" align="right" height="139" alt="Logo de valuate" />
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/r-valuate/valuate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-valuate/valuate/actions/workflows/R-CMD-check.yaml)
@@ -14,7 +14,6 @@
 [![R >= 4.1.0](https://img.shields.io/badge/R-%E2%89%A5%204.1.0-276DC3?logo=r)](https://cran.r-project.org/)
 <!-- badges: end -->
 
-<img src="man/figures/logo.png" align="right" width="120" style="margin-top: -50px; z-index: 1;" />
 
 Este paquete provee una serie de funciones orientadas a facilitar el
 proceso de valuación de inmuebles, siguiendo el desarrollo de [Eguino & Carranza (2025)](https://publications.iadb.org/es/ciencia-de-datos-finanzas-locales-y-gestion-territorial-modelos-de-valuacion-simulaciones-y-codigo). Sin embargo, puede ser también de utilidad para
