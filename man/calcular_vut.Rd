@@ -24,6 +24,7 @@ La funcion estima el precio por metro cuadrado homogeneizado, siguiendo a Carran
 Esta funcion estima el valor de las observaciones muestrales expresado en terminos homogeneos o comparables.
 }
 \examples{
+\dontrun{
 # Cargamos los datos correspondientes a una muestra de 1000 terrenos.
 data("terrenos", package = "valuate")
 
@@ -41,6 +42,7 @@ calcular_vut(df = terrenos,
                                 "situacion_juridica" = "Con Escritura"),
              dependiente = "valor_m2",
              dist = 500)
+}
 }
 \author{
 Juan Pablo Carranza

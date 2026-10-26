@@ -24,9 +24,11 @@ La funcion permite readecuar las resoluciones y proyecciones de diferentes raste
 Esta funcion devuelve un raster que resume el calculo realizado a partir de otro raster, incluyendo fuentes de datos con diferente proyeccion y resolucion espacial.
 }
 \examples{
+\dontrun{
 original = terra::rast(system.file("extdata/edificaciones.tif", package = "valuate"))
 area_de_estudio <- sf::st_read(system.file("extdata/area.gpkg", package = "valuate"))
 calcular_raster(original, area_de_estudio, dim = 50, entorno = 100, "prueba_raster")
+}
 }
 \author{
 Juan Pablo Carranza

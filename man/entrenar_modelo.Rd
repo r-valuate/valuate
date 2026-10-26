@@ -42,6 +42,7 @@ El diseno de esta funcion esta orientado a contextos donde es crucial garantizar
 Esta funcion permite entrenar modelos y cuantificar su error en la prediccion del valor de los inmuebles (o cualquier otra variable territorial que se este analizando).
 }
 \examples{
+\dontrun{
 # A continuacion se presenta un ejemplo para la Ciudad de Medellin (Colombia), con solo 500 datos.
 data("datos", package = "valuate")
 
@@ -61,6 +62,7 @@ entrenar_modelo(df = dat,
                                    system.file("extdata/entorno_hoteles.tif", package = "valuate")),
                 modelo = "qrf",
                 umbral = 0.3)
+}
 }
 \references{
 Kuhn, M. (2008). "Building Predictive Models in R Using the caret Package".
