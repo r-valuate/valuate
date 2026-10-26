@@ -11,6 +11,7 @@
 [![r-universe checks](https://r-valuate.r-universe.dev/valuate/badges/checks)](https://r-valuate.r-universe.dev/valuate)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![DOI](https://zenodo.org/badge/927762257.svg)](https://doi.org/10.5281/zenodo.23671297)
+[![R >= 4.1.0](https://img.shields.io/badge/R-%E2%89%A5%204.1.0-276DC3?logo=r)](https://cran.r-project.org/)
 <!-- badges: end -->
 
 <img src="man/figures/logo.png" align="right" width="120" style="margin-top: -50px; z-index: 1;" />
