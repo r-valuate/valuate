@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/r-valuate/valuate/blob/master/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/r-valuate/valuate/blob/v0.2.1/DESCRIPTION)
 
 Carranza J (2026). *valuate: Caja de herramientas para la realización de
 valuaciones masivas automatizadas*. R package version 0.2.1,
