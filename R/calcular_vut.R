@@ -70,7 +70,7 @@ calcular_vut <- function(df, index, dependiente, independientes, dist) {
   idlist <- lapply(dlist, function(x) 1/x)
   lw <- spdep::nb2listw(d, glist=idlist ,style="W" , zero.policy = TRUE)
   lm <- suppressMessages(spdep::lm.LMtests(ols, lw, test = c("RLMerr", "RLMlag", "SARMA"), zero.policy = TRUE))
-  # Desde spdep 1.3-2 los tests robustos se llaman "adjRSerr" y "adjRSlag"
+  # Desde spdep 1.3-3 los tests robustos se llaman "adjRSerr" y "adjRSlag"
   p_sarma <- lm$SARMA$p.value
   # (antes "RLMerr" y "RLMlag"); se toma el que exista
   p_err <- c(lm$adjRSerr$p.value, lm$RLMerr$p.value)[1]
