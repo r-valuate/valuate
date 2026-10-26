@@ -27,6 +27,8 @@ test_that("calcular_raster genera un .tif con la resolucion y el CRS pedidos", {
     "El proceso de calculo ha finalizado"
   )
   expect_true(file.exists(paste0(nombre, ".tif")))
+  expect_true(exists(nombre, envir = globalenv()))
+  expect_s4_class(get(nombre, envir = globalenv()), "SpatRaster")
 
   resultado <- terra::rast(paste0(nombre, ".tif"))
   expect_equal(terra::res(resultado), c(100, 100))
@@ -37,6 +39,7 @@ test_that("calcular_raster genera un .tif con la resolucion y el CRS pedidos", {
   expect_lte(rango[2, 1], 1)
 
   unlink(paste0(nombre, ".tif"))
+  rm(list = nombre, envir = globalenv())
 })
 
 test_that("calcular_raster con entorno > 0 suaviza los valores", {
@@ -57,4 +60,5 @@ test_that("calcular_raster con entorno > 0 suaviza los valores", {
   expect_lt(stats::sd(con_entorno), stats::sd(sin_entorno))
 
   unlink(c("test_sin_entorno.tif", "test_con_entorno.tif"))
+  rm("test_sin_entorno", "test_con_entorno", envir = globalenv())
 })
