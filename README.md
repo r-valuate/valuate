@@ -7,6 +7,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Codecov test coverage](https://codecov.io/gh/r-valuate/valuate/graph/badge.svg)](https://app.codecov.io/gh/r-valuate/valuate)
+[![r-universe](https://r-valuate.r-universe.dev/valuate/badges/version)](https://r-valuate.r-universe.dev/valuate)
 <!-- badges: end -->
 
 <img src="man/figures/logo.png" align="right" width="120" style="margin-top: -50px; z-index: 1;" />
