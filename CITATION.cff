@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "Si utiliza este paquete, por favor cítelo de la siguiente manera."
+type: software
+title: "valuate: Caja de herramientas para la realización de valuaciones masivas automatizadas"
+version: 0.1.0
+authors:
+  - family-names: Carranza
+    given-names: Juan Pablo
+    email: juan.carranza@unc.edu.ar
+abstract: >-
+  Paquete de R que provee funciones para facilitar el proceso de valuación
+  masiva de inmuebles: creación de variables territoriales, homogeneización
+  de valores, identificación de observaciones espacialmente atípicas,
+  entrenamiento de modelos de aprendizaje computacional y simulación de
+  escenarios para estimar externalidades sobre el precio de los inmuebles.
+license: GPL-3.0-or-later
+repository-code: "https://github.com/r-valuate/valuate"
+url: "https://r-valuate.r-universe.dev/valuate"
+keywords:
+  - R
+  - valuación masiva
+  - catastro
+  - finanzas locales
+  - aprendizaje automático
+  - análisis espacial
