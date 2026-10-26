@@ -1,0 +1,29 @@
+url: https://r-valuate.github.io/valuate/
+
+lang: es
+
+template:
+  bootstrap: 5
+
+reference:
+- title: Variables territoriales
+  desc: Construcción de rásters con las variables independientes.
+  contents:
+  - calcular_dist
+  - calcular_entorno
+  - calcular_raster
+- title: Depuración y homogeneización de la muestra
+  contents:
+  - eliminar_outliers
+  - calcular_vut
+- title: Modelos y escenarios
+  contents:
+  - entrenar_modelo
+  - simular_escenario
+- title: Datos de ejemplo
+  contents:
+  - descargar_datos
+  - datos_disponibles
+  - dat
+  - resultado
+  - terrenos

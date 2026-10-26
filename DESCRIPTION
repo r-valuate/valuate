@@ -15,7 +15,8 @@ Description: Provee funciones para facilitar el proceso de valuación masiva
     extensión geográfica de diferentes externalidades sobre el precio de los
     inmuebles. Puede ser también de utilidad para la predicción de la
     distribución espacial de cualquier tipo de fenómeno geográfico.
-URL: https://github.com/r-valuate/valuate, https://r-valuate.r-universe.dev/valuate
+URL: https://r-valuate.github.io/valuate/, https://github.com/r-valuate/valuate,
+    https://r-valuate.r-universe.dev/valuate
 BugReports: https://github.com/r-valuate/valuate/issues
 Encoding: UTF-8
 LazyData: true
