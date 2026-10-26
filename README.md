@@ -10,6 +10,7 @@
 [![r-universe](https://r-valuate.r-universe.dev/valuate/badges/version)](https://r-valuate.r-universe.dev/valuate)
 [![r-universe checks](https://r-valuate.r-universe.dev/valuate/badges/checks)](https://r-valuate.r-universe.dev/valuate)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![DOI](https://zenodo.org/badge/927762257.svg)](https://doi.org/10.5281/zenodo.23671297)
 <!-- badges: end -->
 
 <img src="man/figures/logo.png" align="right" width="120" style="margin-top: -50px; z-index: 1;" />
