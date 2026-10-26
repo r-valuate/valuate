@@ -9,6 +9,7 @@
 [![Codecov test coverage](https://codecov.io/gh/r-valuate/valuate/graph/badge.svg)](https://app.codecov.io/gh/r-valuate/valuate)
 [![r-universe](https://r-valuate.r-universe.dev/valuate/badges/version)](https://r-valuate.r-universe.dev/valuate)
 [![r-universe checks](https://r-valuate.r-universe.dev/valuate/badges/checks)](https://r-valuate.r-universe.dev/valuate)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 <img src="man/figures/logo.png" align="right" width="120" style="margin-top: -50px; z-index: 1;" />
