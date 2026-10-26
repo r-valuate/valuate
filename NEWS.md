@@ -1,3 +1,26 @@
+# valuate 0.2.1
+
+## Correcciones
+
+* `entrenar_modelo()`: cuando el error superaba el umbral, el proceso de
+  depuración eliminaba observaciones equivocadas (no necesariamente las de
+  error alto), porque comparaba los errores en un orden distinto al de los
+  datos. Ahora se eliminan exactamente las observaciones con error mayor o
+  igual a `eliminar`. Esto puede cambiar los resultados obtenidos con
+  versiones anteriores cuando el ciclo de depuración se activaba.
+* `entrenar_modelo()`: si el error sigue por encima del umbral pero ya no
+  quedan observaciones para eliminar, el proceso se detiene con un mensaje en
+  lugar de repetirse indefinidamente. El mensaje informa correctamente la
+  cantidad de observaciones eliminadas en cada vuelta.
+
+## Otros cambios
+
+* `calcular_vut()` usa una función interna más simple para crear las variables
+  indicadoras, en lugar de una copia de `fastDummies::dummy_cols()`. Los
+  resultados son idénticos.
+* Cobertura de tests del 100%, incluidos los modelos LAG y de error espacial
+  de `calcular_vut()`.
+
 # valuate 0.2.0
 
 ## Cambios que afectan el uso del paquete

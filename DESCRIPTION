@@ -1,7 +1,7 @@
 Package: valuate
 Type: Package
 Title: Caja de herramientas para la realización de valuaciones masivas automatizadas
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c(person(given = "Juan Pablo", family = "Carranza", email = "juan.carranza@unc.edu.ar",
                   role = c("aut", "cre", "ctb")))
 Description: Provee funciones para facilitar el proceso de valuación masiva

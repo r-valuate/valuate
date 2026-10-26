@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "Si utiliza este paquete, por favor cítelo de la siguiente manera."
 type: software
 title: "valuate: Caja de herramientas para la realización de valuaciones masivas automatizadas"
-version: 0.2.0
+version: 0.2.1
 authors:
   - family-names: Carranza
     given-names: Juan Pablo

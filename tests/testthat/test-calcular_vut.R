@@ -91,3 +91,67 @@ test_that("calcular_vut funciona cuando no hay dependencia espacial (modelo MCO)
   # El lote tipico (mediana de superficie, con escritura) tiene coeficiente cercano a 1
   expect_equal(stats::median(res$coef[res$situacion_juridica == "Con Escritura"]), 1, tolerance = 0.05)
 })
+
+test_that("calcular_vut aplica un modelo LAG cuando corresponde", {
+  pdf(NULL)
+  on.exit(grDevices::dev.off(), add = TRUE)
+  res <- correr_calcular_vut(simular_dependencia(53, rho = 0.1, tipo = "lag", dist = 500), dist = 500)
+
+  expect_true(any(grepl("modelo de rezago espacial LAG", res$mensajes)))
+  efectos <- stats::setNames(res$salida$efectos$Efecto, res$salida$efectos$Variable)
+  expect_equal(unname(efectos["superficie"]), -0.4, tolerance = 0.15)
+  expect_equal(unname(efectos["situacion_juridicaSin escritura"]), -0.5, tolerance = 0.15)
+  expect_equal(res$salida$datos$vut, res$salida$datos$valor_m2 * res$salida$datos$coef)
+})
+
+test_that("calcular_vut aplica un modelo de ERROR espacial cuando corresponde", {
+  pdf(NULL)
+  on.exit(grDevices::dev.off(), add = TRUE)
+  res <- correr_calcular_vut(simular_dependencia(108, rho = 0.2, tipo = "error", dist = 300), dist = 300)
+
+  expect_true(any(grepl("rezago del ERROR espacial", res$mensajes)))
+  efectos <- stats::setNames(res$salida$efectos$Efecto, res$salida$efectos$Variable)
+  expect_equal(unname(efectos["superficie"]), -0.4, tolerance = 0.15)
+  expect_equal(unname(efectos["situacion_juridicaSin escritura"]), -0.5, tolerance = 0.15)
+  expect_equal(res$salida$datos$vut, res$salida$datos$valor_m2 * res$salida$datos$coef)
+})
+
+test_that("calcular_vut puede usar la media como referencia del lote tipico", {
+  data("terrenos", package = "valuate", envir = environment())
+  muestra <- terrenos[1:250, ]
+  pdf(NULL)
+  on.exit(grDevices::dev.off(), add = TRUE)
+
+  correr <- function(referencia) {
+    salida <- NULL
+    capture.output(salida <- suppressMessages(calcular_vut(
+      df = muestra, index = "id", dependiente = "valor_m2",
+      independientes = c("superficie" = referencia, "situacion_juridica" = "Con Escritura"),
+      dist = 500)))
+    salida$datos
+  }
+  con_media <- correr("media")
+  con_mediana <- correr("mediana")
+
+  expect_equal(con_media$vut, con_media$valor_m2 * con_media$coef)
+  # Cambiar la referencia del lote tipico cambia los coeficientes
+  expect_false(isTRUE(all.equal(con_media$coef, con_mediana$coef)))
+})
+
+test_that("calcular_vut informa y descarta las geometrias duplicadas", {
+  data("terrenos", package = "valuate", envir = environment())
+  muestra <- terrenos[1:250, ]
+  muestra <- rbind(muestra, muestra[1:3, ])
+  muestra$id[251:253] <- max(muestra$id) + 1:3
+  pdf(NULL)
+  on.exit(grDevices::dev.off(), add = TRUE)
+
+  expect_message(
+    capture.output(calcular_vut(df = muestra, index = "id", dependiente = "valor_m2",
+                                independientes = c("tipo_valor" = "Venta",
+                                                   "superficie" = "mediana",
+                                                   "situacion_juridica" = "Con Escritura"),
+                                dist = 500)),
+    "Se eliminaran 3 observaciones con geometrias duplicadas"
+  )
+})
