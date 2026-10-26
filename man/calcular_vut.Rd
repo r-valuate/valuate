@@ -18,7 +18,7 @@ calcular_vut(df, index, dependiente, independientes, dist)
 \item{dist}{Distancia que define el vecindario sobre el que se realizara la correccion por dependencia espacial.}
 }
 \value{
-La funcion estima el precio por metro cuadrado homogeneizado, siguiendo a Carranza (2024). Toma como input un objeto espacial 'sf' y ajusta coeficientes de correccion segun diferentes variables definidas por el usuario para reexpresar el precio en termino de un 'lote tipico' para el area de estudio. La funcion devuelve un objeto llamado "resultado", que consiste en el df original al cual se agrega una columna correspondiente al valor homogeneizado (vut) y otra columna con el coeficiente de homogeneizacion aplicado (coef). Se informa, ademas, el parametro de ajuste estimado por el modelo lineal para cada una de las variables independientes involucradas en el proceso de homogeneizacion.
+Una lista con dos elementos: \code{datos}, la muestra original (objeto 'sf') con dos columnas nuevas, \code{vut} (precio homogeneizado) y \code{coef} (coeficiente de homogeneizacion aplicado); y \code{efectos}, una tabla con los efectos estadisticamente significativos de cada variable. La lista se devuelve de forma invisible, y la tabla de efectos se imprime en la consola. La funcion estima el precio por metro cuadrado homogeneizado, siguiendo a Carranza (2024). Toma como input un objeto espacial 'sf' y ajusta coeficientes de correccion segun diferentes variables definidas por el usuario para reexpresar el precio en termino de un 'lote tipico' para el area de estudio. Se informa, ademas, el parametro de ajuste estimado por el modelo lineal para cada una de las variables independientes involucradas en el proceso de homogeneizacion.
 }
 \description{
 Esta funcion estima el valor de las observaciones muestrales expresado en terminos homogeneos o comparables.
@@ -35,13 +35,19 @@ data("terrenos", package = "valuate")
 # es "valor_m2".
 # Se define al vecindario en base a una distancia euclidiana de 500 metros.
 
-calcular_vut(df = terrenos,
-             index = "id",
-             independientes = c("tipo_valor" = "Venta",
-                                "superficie" = "mediana",
-                                "situacion_juridica" = "Con Escritura"),
-             dependiente = "valor_m2",
-             dist = 500)
+vut <- calcular_vut(df = terrenos,
+                    index = "id",
+                    independientes = c("tipo_valor" = "Venta",
+                                       "superficie" = "mediana",
+                                       "situacion_juridica" = "Con Escritura"),
+                    dependiente = "valor_m2",
+                    dist = 500)
+
+# Muestra con el precio homogeneizado
+vut$datos
+
+# Efectos estimados
+vut$efectos
 }
 }
 \author{

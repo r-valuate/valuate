@@ -5,9 +5,9 @@
 #' @param area Poligono que indica el area sobre la cual se ejecutara el calculo.
 #' @param objeto Objeto espacial "sf" contra el que se calcularan las distancias.
 #' @param dim Tamano de cada pixel del raster resultante, en metros.
-#' @param nombre Nombre de la variable resultante. El raster sera guardado en el entorno de trabajo con este nombre y la extension ".tif".
+#' @param nombre Nombre de la variable resultante. El raster se guarda ademas en el directorio de trabajo con este nombre y la extension ".tif".
 #'
-#' @return Se genera un raster que informa, para cada pixel, sobre la distancia (en metros lineales) al objeto mas cercano.
+#' @return Un objeto 'SpatRaster' (libreria 'terra'). Se genera un raster que informa, para cada pixel, sobre la distancia (en metros lineales) al objeto mas cercano.
 #' @export
 #'
 #' @examples
@@ -23,10 +23,10 @@
 #' vias_prim <- vias_prim$osm_lines
 #'
 #' # Calculamos un raster con las distancias a la via principal mas cercana
-#' calcular_dist(area = area_de_estudio,
-#'               objeto = vias_prim,
-#'               dim = 50,
-#'               nombre = "vias")
+#' vias <- calcular_dist(area = area_de_estudio,
+#'                       objeto = vias_prim,
+#'                       dim = 50,
+#'                       nombre = "vias")
 #' }
 calcular_dist <- function(area, objeto, dim, nombre){
   area <- sf::st_transform(area, 3857)
@@ -41,6 +41,6 @@ calcular_dist <- function(area, objeto, dim, nombre){
   names(var) <- nombre
   terra::plot(var, col = viridis::plasma(100), main = paste0("Variable: ", nombre))
   terra::writeRaster(var, paste0(nombre, ".tif"), overwrite = TRUE)
-  assign(nombre, var, envir=globalenv())
-  message(paste0("El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre ", nombre, ".tif. En el environment se ha creado el raster '", nombre, "'."))
+  message(paste0("El proceso de calculo ha finalizado. El raster resultante tambien fue guardado en el directorio de trabajo con el nombre ", nombre, ".tif."))
+  return(var)
 }

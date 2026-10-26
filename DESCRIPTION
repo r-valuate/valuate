@@ -1,7 +1,7 @@
 Package: valuate
 Type: Package
 Title: Caja de herramientas para la realización de valuaciones masivas automatizadas
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(person(given = "Juan Pablo", family = "Carranza", email = "juan.carranza@unc.edu.ar",
                   role = c("aut", "cre", "ctb")))
 Description: Provee funciones para facilitar el proceso de valuación masiva
@@ -23,7 +23,6 @@ Depends:
     R (>= 4.1.0)
 Imports:
     dplyr,
-    ggplot2,
     sf,
     sp,
     spdep,
@@ -31,11 +30,8 @@ Imports:
     raster,
     fasterize,
     viridis,
-    stars,
     caret,
     quantregForest,
-    osmdata,
-    nominatimlite,
     parallel,
     doParallel,
     data.table,
@@ -45,9 +41,12 @@ Imports:
     utils,
     graphics,
     stats,
+    tools,
     methods
 RoxygenNote: 7.3.2
 License: GPL (>= 3)
 Suggests: 
+    nominatimlite,
+    osmdata,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

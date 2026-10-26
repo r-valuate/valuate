@@ -1,14 +1,14 @@
 library(testthat)
 library(sf)
 
-test_that("calcular_vut agrega las columnas 'vut' y 'coef' y devuelve una tabla de efectos", {
+test_that("calcular_vut devuelve la muestra con 'vut' y 'coef' y la tabla de efectos", {
   data("terrenos", package = "valuate", envir = environment())
   muestra <- terrenos[1:250, ]
 
   pdf(NULL)
   on.exit(grDevices::dev.off(), add = TRUE)
 
-  tabla <- suppressMessages(
+  capture.output(salida <- suppressMessages(
     calcular_vut(df = muestra,
                  index = "id",
                  independientes = c("tipo_valor" = "Venta",
@@ -16,20 +16,21 @@ test_that("calcular_vut agrega las columnas 'vut' y 'coef' y devuelve una tabla 
                                     "situacion_juridica" = "Con Escritura"),
                  dependiente = "valor_m2",
                  dist = 500)
-  )
+  ))
 
-  expect_s3_class(tabla, "knitr_kable")
-  expect_true(exists("resultado", envir = globalenv()))
+  expect_type(salida, "list")
+  expect_named(salida, c("datos", "efectos"))
+  expect_false(exists("resultado", envir = globalenv(), inherits = FALSE))
+  expect_s3_class(salida$efectos, "data.frame")
+  expect_named(salida$efectos, c("Variable", "p-valor", "Efecto"))
 
-  res <- get("resultado", envir = globalenv())
+  res <- salida$datos
   expect_s3_class(res, "sf")
   expect_equal(nrow(res), nrow(muestra))
   expect_true(all(c("vut", "coef") %in% names(res)))
   # vut = valor_m2 * coef
   expect_equal(res$vut, res$valor_m2 * res$coef)
   expect_true(all(res$vut[!is.na(res$vut)] > 0))
-
-  rm("resultado", envir = globalenv())
 })
 
 test_that("calcular_vut informa la eliminacion de datos faltantes", {
@@ -41,14 +42,13 @@ test_that("calcular_vut informa la eliminacion de datos faltantes", {
   on.exit(grDevices::dev.off(), add = TRUE)
 
   expect_message(
-    calcular_vut(df = muestra, index = "id",
+    capture.output(calcular_vut(df = muestra, index = "id",
                  independientes = c("tipo_valor" = "Venta",
                                     "superficie" = "mediana",
                                     "situacion_juridica" = "Con Escritura"),
-                 dependiente = "valor_m2", dist = 500),
+                 dependiente = "valor_m2", dist = 500)),
     "Se eliminaran 3 observaciones con datos faltantes"
   )
-  rm("resultado", envir = globalenv())
 })
 
 test_that("calcular_vut funciona cuando no hay dependencia espacial (modelo MCO)", {
@@ -71,7 +71,7 @@ test_that("calcular_vut funciona cuando no hay dependencia espacial (modelo MCO)
   on.exit(grDevices::dev.off(), add = TRUE)
 
   expect_output(
-    tabla <- suppressMessages(
+    salida <- suppressMessages(
       calcular_vut(df = muestra, index = "id",
                    independientes = c("superficie" = "mediana",
                                       "situacion_juridica" = "Con Escritura"),
@@ -79,13 +79,15 @@ test_that("calcular_vut funciona cuando no hay dependencia espacial (modelo MCO)
     ),
     "minimos cuadrados ordinarios"
   )
-  expect_s3_class(tabla, "knitr_kable")
+  expect_named(salida, c("datos", "efectos"))
+  # Recupera los efectos verdaderos
+  efectos <- stats::setNames(salida$efectos$Efecto, salida$efectos$Variable)
+  expect_equal(unname(efectos["superficie"]), -0.4, tolerance = 0.15)
+  expect_equal(unname(efectos["situacion_juridicaSin escritura"]), -0.5, tolerance = 0.15)
 
-  res <- get("resultado", envir = globalenv())
+  res <- salida$datos
   expect_true(all(c("vut", "coef") %in% names(res)))
   expect_equal(res$vut, res$valor_m2 * res$coef)
   # El lote tipico (mediana de superficie, con escritura) tiene coeficiente cercano a 1
   expect_equal(stats::median(res$coef[res$situacion_juridica == "Con Escritura"]), 1, tolerance = 0.05)
-
-  rm("resultado", envir = globalenv())
 })

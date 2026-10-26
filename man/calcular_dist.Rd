@@ -13,10 +13,10 @@ calcular_dist(area, objeto, dim, nombre)
 
 \item{dim}{Tamano de cada pixel del raster resultante, en metros.}
 
-\item{nombre}{Nombre de la variable resultante. El raster sera guardado en el entorno de trabajo con este nombre y la extension ".tif".}
+\item{nombre}{Nombre de la variable resultante. El raster se guarda ademas en el directorio de trabajo con este nombre y la extension ".tif".}
 }
 \value{
-Se genera un raster que informa, para cada pixel, sobre la distancia (en metros lineales) al objeto mas cercano.
+Un objeto 'SpatRaster' (libreria 'terra'). Se genera un raster que informa, para cada pixel, sobre la distancia (en metros lineales) al objeto mas cercano.
 }
 \description{
 Esta funcion devuelve un raster con las distancias euclidianas, en metros, desde cada pixel hacia el objeto vectorial mas cercano.
@@ -34,10 +34,10 @@ vias_prim <- osmdata::opq(bbox) |>
 vias_prim <- vias_prim$osm_lines
 
 # Calculamos un raster con las distancias a la via principal mas cercana
-calcular_dist(area = area_de_estudio,
-              objeto = vias_prim,
-              dim = 50,
-              nombre = "vias")
+vias <- calcular_dist(area = area_de_estudio,
+                      objeto = vias_prim,
+                      dim = 50,
+                      nombre = "vias")
 }
 }
 \author{

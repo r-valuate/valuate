@@ -15,10 +15,10 @@ calcular_entorno(area, objeto, dim, ext, nombre)
 
 \item{ext}{Extension del entorno o radio que define el vecindario, en metros lineales.}
 
-\item{nombre}{Nombre de la variable resultante. El raster sera guardado en el entorno de trabajo con este nombre y la extension ".tif".}
+\item{nombre}{Nombre de la variable resultante. El raster se guarda ademas en el directorio de trabajo con este nombre y la extension ".tif".}
 }
 \value{
-Cuando se le provee un objeto espacial "sf" con geometria "POLYGON" o "MULTIPOLYGON" la funcion permite calcular variables independientes que resumen las caracteristicas del vecindario, indicando la proporcion del espacio que se encuentra cubierto por los poligonos de interes. Por ejemplo, permite calcular el porcentaje del vecindario que se encuentra cubierto por plazas o parques. Cuando se le provee un objeto espacial "sf" con geometria "POINT" la funcion permite calcular variables independientes que resumen las caracteristicas del vecindario, indicando la cantidad de puntos de interes que se encuentran dentro del entorno definido por el usuario. Por ejemplo, permite calcular la cantidad de negocios u oficinas que se encuentran dentro de un radio de "x" metros de cada pixel.
+Un objeto 'SpatRaster' (libreria 'terra'). Cuando se le provee un objeto espacial "sf" con geometria "POLYGON" o "MULTIPOLYGON" la funcion permite calcular variables independientes que resumen las caracteristicas del vecindario, indicando la proporcion del espacio que se encuentra cubierto por los poligonos de interes. Por ejemplo, permite calcular el porcentaje del vecindario que se encuentra cubierto por plazas o parques. Cuando se le provee un objeto espacial "sf" con geometria "POINT" la funcion permite calcular variables independientes que resumen las caracteristicas del vecindario, indicando la cantidad de puntos de interes que se encuentran dentro del entorno definido por el usuario. Por ejemplo, permite calcular la cantidad de negocios u oficinas que se encuentran dentro de un radio de "x" metros de cada pixel.
 }
 \description{
 Esta funcion devuelve un raster que resume las caracteristicas del vecindario a partir de capas geograficas vectoriales de poligonos o de puntos.
@@ -36,11 +36,11 @@ plazas <- osmdata::opq(bbox) |>
 plazas <- plazas$osm_polygons
 
 # Calculamos un raster que resume, para cada pixel, las caracteristicas del entorno
-calcular_entorno(area = area_de_estudio,
-                 ext = 500,
-                 objeto = plazas,
-                 dim = 50,
-                 nombre = "plazas_entorno")
+plazas_entorno <- calcular_entorno(area = area_de_estudio,
+                                   ext = 500,
+                                   objeto = plazas,
+                                   dim = 50,
+                                   nombre = "plazas_entorno")
 }
 }
 \author{

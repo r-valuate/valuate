@@ -17,13 +17,11 @@ test_that("calcular_entorno con poligonos devuelve la proporcion cubierta (entre
   pdf(NULL)
   on.exit(grDevices::dev.off(), add = TRUE)
 
-  expect_output(
-    calcular_entorno(area, plaza, dim = 100, ext = 200, nombre = nombre),
+  expect_message(
+    resultado <- calcular_entorno(area, plaza, dim = 100, ext = 200, nombre = nombre),
     "El proceso de calculo ha finalizado"
   )
   expect_true(file.exists(paste0(nombre, ".tif")))
-
-  resultado <- get(nombre, envir = globalenv())
   expect_s4_class(resultado, "SpatRaster")
   valores <- terra::values(resultado, na.rm = TRUE)
   expect_gte(min(valores), 0)
@@ -33,5 +31,4 @@ test_that("calcular_entorno con poligonos devuelve la proporcion cubierta (entre
   expect_equal(min(valores), 0)
 
   unlink(paste0(nombre, ".tif"))
-  rm(list = nombre, envir = globalenv())
 })

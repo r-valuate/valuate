@@ -41,12 +41,26 @@ para facilitar las siguientes acciones:
 
 ## Instalación
 
-Para instalar la versión de desarrollo de esta librería en la consola de
-R se debe ejecutar el siguiente código:
+La forma recomendada de instalar el paquete es desde R-universe, que
+ofrece versiones precompiladas para Windows, macOS y Linux:
+
+``` r
+install.packages("valuate", repos = c("https://r-valuate.r-universe.dev",
+                                      "https://cloud.r-project.org"))
+```
+
+También es posible instalar la versión de desarrollo directamente desde
+GitHub:
 
 ``` r
 remotes::install_github("r-valuate/valuate")
 ```
+
+Los rásters de ejemplo de la ciudad de Medellín (Colombia) que se
+utilizan más abajo no se incluyen en el paquete por su tamaño. La
+función descargar_datos() los descarga la primera vez que se utilizan y
+los guarda en una carpeta local, por lo que las siguientes veces no es
+necesario volver a descargarlos.
 
 ## Contenidos
 
@@ -68,15 +82,15 @@ vias_prim <- osmdata::opq(bbox) |>
 vias_prim <- vias_prim$osm_lines
 
 # Calculamos un ráster con las distancias a la vía principal más cercana
-calcular_dist(area = area_de_estudio,
-              objeto = vias_prim,
-              dim = 50,
-              nombre = "vias")
+vias <- calcular_dist(area = area_de_estudio,
+                      objeto = vias_prim,
+                      dim = 50,
+                      nombre = "vias")
 ```
 
 <img src="man/figures/README-calcular_dist-1.png" width="100%" />
 
-    #> El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre vias.tif. En el environment se ha creado el raster 'vias'.
+    #> El proceso de calculo ha finalizado. El raster resultante tambien fue guardado en el directorio de trabajo con el nombre vias.tif.
 
 La función calcular_entorno() resume las características de un entorno
 definido por el usuario, a partir de capas geográficas vectoriales de
@@ -108,11 +122,11 @@ plazas <- osmdata::opq(bbox) |>
 plazas <- plazas$osm_polygons
 
 # Calculamos un ráster que resume, para cada píxel las características del entorno
-calcular_entorno(area = area_de_estudio,
-                 ext = 500,
-                 objeto = plazas,
-                 dim = 50,
-                 nombre = "plazas_entorno")
+plazas_entorno <- calcular_entorno(area = area_de_estudio,
+                                   ext = 500,
+                                   objeto = plazas,
+                                   dim = 50,
+                                   nombre = "plazas_entorno")
 #> Warning in CPL_transform(x, crs, aoi, pipeline, reverse, desired_accuracy, :
 #> GDAL Error 1: PROJ: proj_as_wkt: DatumEnsemble can only be exported to
 #> WKT2:2019
@@ -120,7 +134,7 @@ calcular_entorno(area = area_de_estudio,
 
 <img src="man/figures/README-calcular_entorno-1.png" width="100%" />
 
-    #> [1] "El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre plazas_entorno.tif. En el environment se ha creado el raster 'plazas_entorno'."
+    #> El proceso de calculo ha finalizado. El raster resultante tambien fue guardado en el directorio de trabajo con el nombre plazas_entorno.tif.
 
 La función calcular_raster() devuelve un ráster que resume el cálculo
 realizado a partir de otro ráster, incluyendo fuentes de datos con
@@ -134,22 +148,15 @@ edificaciones detectadas en un píxel a partir de una imagen satelital en
 la ciudad de Medellín (Colombia):
 
 ``` r
-original = terra::rast("inst/extdata/edificaciones.tif")
-area_de_estudio = sf::st_read("inst/extdata/area.gpkg")
-#> Reading layer `area' from data source 
-#>   `/home/juan/Documentos/GitHub/valuate/valuate/inst/extdata/area.gpkg' 
-#>   using driver `GPKG'
-#> Simple feature collection with 1 feature and 1 field
-#> Geometry type: POLYGON
-#> Dimension:     XY
-#> Bounding box:  xmin: -75.66658 ymin: 6.066645 xmax: -75.49011 ymax: 6.367076
-#> Geodetic CRS:  WGS 84
-calcular_raster(original, area_de_estudio, dim = 50, entorno = 100, "prueba_raster")
+original <- terra::rast(descargar_datos("edificaciones.tif"))
+area_de_estudio <- sf::st_read(system.file("extdata/area.gpkg", package = "valuate"), quiet = TRUE)
+edificaciones <- calcular_raster(original, area_de_estudio, dim = 50, entorno = 100,
+                                 nombre = "edificaciones")
 ```
 
 <img src="man/figures/README-calcular_raster-1.png" width="100%" />
 
-    #> El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre prueba_raster.tif. En el environment se ha creado el raster 'prueba_raster'.
+    #> El proceso de calculo ha finalizado. El raster resultante tambien fue guardado en el directorio de trabajo con el nombre edificaciones.tif.
 
 La función calcular_vut() estima el valor de las obervaciones muestrales
 expresado en términos homogéneos o comparables. La función estima el
@@ -157,10 +164,7 @@ precio por metro cuadrado homogeneizado, siguiendo a Carranza (2024).
 Toma como input un objeto espacial ‘sf’ y ajusta coeficientes de
 corrección según diferentes variables definidas por el usuario para
 reexpresar el precio en término de un ‘lote típico’ para el área de
-estudio. La función devuelve un objetivo llamado “resultado”, que
-consiste en el df original al cual se agrega una columna correspondiente
-al valor homogeneizado (vut) y otra columna con el coeficiente de
-homogeneización aplicado (coef). Se informa, además, el parámetro de
+estudio. La función devuelve una lista con dos elementos: “datos”, que consiste en el df original al cual se agrega una columna correspondiente al valor homogeneizado (vut) y otra columna con el coeficiente de homogeneización aplicado (coef); y “efectos”, una tabla con los efectos estimados. Se informa, además, el parámetro de
 ajuste estimado por el modelo lineal para cada una de las variables
 independientes involucradas en el proceso de homogeneización.
 
@@ -172,7 +176,7 @@ superficie de cada lote.
 
 ``` r
 # Cargamos los datos correspondientes a una muestra de 1000 terrenos.
-load("data/terrenos.rda")
+data("terrenos", package = "valuate")
 
 # Se define como "lote típico" a aquel que se corresponde a una operación de
 # venta, realizada con escritura, y de una superficie igual a la mediana
@@ -181,13 +185,13 @@ load("data/terrenos.rda")
 # es "valor_m2".
 # Se define al vecindario en base a una distancia euclidiana de 500 metros.
 
-calcular_vut(df = terrenos,
-             index = "id",
-             independientes = c("tipo_valor" = "Venta",
-                                "superficie" = "mediana",
-                                "situacion_juridica" = "Con Escritura"),
-             dependiente = "valor_m2",
-             dist = 500)
+vut <- calcular_vut(df = terrenos,
+                    index = "id",
+                    independientes = c("tipo_valor" = "Venta",
+                                       "superficie" = "mediana",
+                                       "situacion_juridica" = "Con Escritura"),
+                    dependiente = "valor_m2",
+                    dist = 500)
 #> Se eliminaran 1 observaciones con datos faltantes
 #> Se procedera a realizar correcciones por dependencia espacial aplicando un modelo SARMA.
 #> Este proceso puede demorar varios minutos, dependiendo de la cantidad de observaciones en la muestra.
@@ -196,8 +200,8 @@ calcular_vut(df = terrenos,
 
 <img src="man/figures/README-calcular_vut-1.png" width="100%" />
 
-    #> El proceso de homogeneizacion ha finalizado. Se ha agregado al entorno de trabajo un nuevo objeto que contiene la muestra original, mas una nueva columna llamada 'vut', que contiene el precio reexpresado en terminos homogeneos.
-    #> Los efectos estadisticamene significativos fueron los siguientes:
+    #> El proceso de homogeneizacion ha finalizado.
+    #> Los efectos estadisticamente significativos fueron los siguientes:
 
 | Variable                              |   p-valor |     Efecto |
 |:--------------------------------------|----------:|-----------:|
@@ -239,9 +243,10 @@ en los siguientes pasos principales:
   de salida que se guarda en el directorio de trabajo con el nombre
   ‘vut.tif’.
 
-- Salida de datos: La función genera dos conjuntos de datos en el
-  entorno global: datos_utilizados (datos que cumplieron con el umbral
-  de error) y datos_eliminados (datos descartados por errores altos).
+- Salida de datos: La función devuelve una lista con la predicción
+  (prediccion), el modelo entrenado (modelo), los datos que cumplieron
+  con el umbral de error (utilizados) y los datos descartados por
+  errores altos (eliminados).
 
 La función está optimizada para aplicaciones que requieren análisis
 espaciales precisos y está diseñada para integrarse en flujos de trabajo
@@ -255,24 +260,17 @@ mediante las librerías ‘sf’ y ‘raster’.
 
 ``` r
 # A continuación se presenta un ejemplo para la Ciudad de Medellín (Colombia), con sólo 500 datos.
-load("data/datos.rda")
+data("datos", package = "valuate")
+rasters <- descargar_datos(c("dist_basura.tif", "dist_industria.tif", "dist_plazas_parques.tif",
+                             "dist_tren.tif", "dist_vias_autopista.tif", "dist_vias_prim.tif",
+                             "dist_vias_sec.tif", "entorno_altura.tif", "entorno_plazas_parques.tif",
+                             "entorno_comercios.tif", "entorno_edificaciones.tif", "entorno_hoteles.tif"))
 
-entrenar_modelo(df = dat,
-                dependiente = "vut",
-                independientes = c("inst/extdata/dist_basura.tif",
-                                   "inst/extdata/dist_industria.tif",
-                                   "inst/extdata/dist_plazas_parques.tif",
-                                   "inst/extdata/dist_tren.tif",
-                                   "inst/extdata/dist_vias_autopista.tif",
-                                   "inst/extdata/dist_vias_prim.tif",
-                                   "inst/extdata/dist_vias_sec.tif",
-                                   "inst/extdata/entorno_altura.tif",
-                                   "inst/extdata/entorno_plazas_parques.tif",
-                                   "inst/extdata/entorno_comercios.tif",
-                                   "inst/extdata/entorno_edificaciones.tif",
-                                   "inst/extdata/entorno_hoteles.tif"),
-                modelo = "qrf",
-                umbral = 0.3)
+modelo <- entrenar_modelo(df = dat,
+                          dependiente = "vut",
+                          independientes = rasters,
+                          modelo = "qrf",
+                          umbral = 0.3)
 #> ...entrenando modelo...
 #> El entrenamiento ha finalizado.
 #> El MAPE fue igual a +/- 28.67%.
@@ -284,6 +282,10 @@ entrenar_modelo(df = dat,
 
     #> En el directorio de trabajo se ha guardado un raster con la prediccion, con el nombre 'vut.tif'.
     #> En el directorio de trabajo se ha guardado un archivo con el modelo aplicado, con el nombre 'modelo.rda'.
+
+Los distintos resultados quedan disponibles en el objeto devuelto por la
+función: por ejemplo, `modelo$prediccion` contiene el ráster con la
+predicción y `modelo$eliminados` los datos descartados.
 
 Finalmente, la función simular_escenario() permite, a partir de la
 predicción de la distribución espacial de una variable, estimar

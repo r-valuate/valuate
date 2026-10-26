@@ -6,9 +6,9 @@
 #' @param objeto Objeto espacial "sf" con geometria del tipo "POLYGON" o "MULTIPOLYGON" sobre el que se calcularan las caracteristicas del entorno.
 #' @param dim Tamano de cada pixel del raster resultante, en metros.
 #' @param ext Extension del entorno o radio que define el vecindario, en metros lineales.
-#' @param nombre Nombre de la variable resultante. El raster sera guardado en el entorno de trabajo con este nombre y la extension ".tif".
+#' @param nombre Nombre de la variable resultante. El raster se guarda ademas en el directorio de trabajo con este nombre y la extension ".tif".
 #'
-#' @return Cuando se le provee un objeto espacial "sf" con geometria "POLYGON" o "MULTIPOLYGON" la funcion permite calcular variables independientes que resumen las caracteristicas del vecindario, indicando la proporcion del espacio que se encuentra cubierto por los poligonos de interes. Por ejemplo, permite calcular el porcentaje del vecindario que se encuentra cubierto por plazas o parques. Cuando se le provee un objeto espacial "sf" con geometria "POINT" la funcion permite calcular variables independientes que resumen las caracteristicas del vecindario, indicando la cantidad de puntos de interes que se encuentran dentro del entorno definido por el usuario. Por ejemplo, permite calcular la cantidad de negocios u oficinas que se encuentran dentro de un radio de "x" metros de cada pixel.
+#' @return Un objeto 'SpatRaster' (libreria 'terra'). Cuando se le provee un objeto espacial "sf" con geometria "POLYGON" o "MULTIPOLYGON" la funcion permite calcular variables independientes que resumen las caracteristicas del vecindario, indicando la proporcion del espacio que se encuentra cubierto por los poligonos de interes. Por ejemplo, permite calcular el porcentaje del vecindario que se encuentra cubierto por plazas o parques. Cuando se le provee un objeto espacial "sf" con geometria "POINT" la funcion permite calcular variables independientes que resumen las caracteristicas del vecindario, indicando la cantidad de puntos de interes que se encuentran dentro del entorno definido por el usuario. Por ejemplo, permite calcular la cantidad de negocios u oficinas que se encuentran dentro de un radio de "x" metros de cada pixel.
 #' @export
 #'
 #' @examples
@@ -24,11 +24,11 @@
 #' plazas <- plazas$osm_polygons
 #'
 #' # Calculamos un raster que resume, para cada pixel, las caracteristicas del entorno
-#' calcular_entorno(area = area_de_estudio,
-#'                  ext = 500,
-#'                  objeto = plazas,
-#'                  dim = 50,
-#'                  nombre = "plazas_entorno")
+#' plazas_entorno <- calcular_entorno(area = area_de_estudio,
+#'                                    ext = 500,
+#'                                    objeto = plazas,
+#'                                    dim = 50,
+#'                                    nombre = "plazas_entorno")
 #' }
 calcular_entorno <- function(area, objeto, dim, ext, nombre){
   a = table(sf::st_geometry_type(objeto)) |> as.data.frame() |> dplyr::filter(Freq > 0)
@@ -64,8 +64,8 @@ calcular_entorno <- function(area, objeto, dim, ext, nombre){
   var <- terra::mask(var, area)
   terra::plot(var, col = viridis::plasma(100), main = paste0("Variable: ", nombre))
   terra::writeRaster(var, paste0(nombre, ".tif"), overwrite = TRUE)
-  assign(nombre, var, envir=globalenv())
-  print(paste0("El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre ", nombre, ".tif. En el environment se ha creado el raster '", nombre, "'."))
+  message(paste0("El proceso de calculo ha finalizado. El raster resultante tambien fue guardado en el directorio de trabajo con el nombre ", nombre, ".tif."))
+  return(var)
   }
  else{
    area <- sf::st_transform(area, 3857)
@@ -97,7 +97,7 @@ calcular_entorno <- function(area, objeto, dim, ext, nombre){
    var <- terra::mask(var, area)
    terra::plot(var, col = viridis::plasma(100), main = paste0("Variable: ", nombre))
    terra::writeRaster(var, paste0(nombre, ".tif"), overwrite = TRUE)
-   assign(nombre, var, envir=globalenv())
-   print(paste0("El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre ", nombre, ".tif. En el environment se ha creado el raster '", nombre, "'."))
+   message(paste0("El proceso de calculo ha finalizado. El raster resultante tambien fue guardado en el directorio de trabajo con el nombre ", nombre, ".tif."))
+   return(var)
  }
 }

@@ -18,31 +18,33 @@ eliminar_outliers(df, dist, variable, umbral, moran)
 \item{moran}{Logical. Si asume el valor 'TRUE' se procede a identificar outliers mediante el calculo del indice de Moran local. En este caso, el parametro 'umbral' queda sin efecto.}
 }
 \value{
-La funcion permite identificar valores que son muy diferentes a los observados en el entorno. Para ello, compara el valor de cada observacion con el promedio del entorno (ponderado por la distancia, mediante la construccion de una matriz de pesos espaciales). Tambien permite identificar outliers espaciales mediante el calculo del indice de Moran local, siguiendo a Anselin (1995).
+Un objeto 'sf' con las observaciones de la muestra original, sin las identificadas como espacialmente atipicas. La funcion permite identificar valores que son muy diferentes a los observados en el entorno. Para ello, compara el valor de cada observacion con el promedio del entorno (ponderado por la distancia, mediante la construccion de una matriz de pesos espaciales). Tambien permite identificar outliers espaciales mediante el calculo del indice de Moran local, siguiendo a Anselin (1995).
 }
 \description{
 Esta funcion permite eliminar observaciones cuyo valor es muy diferente a los observados en el entorno. Permite identificar outliers espaciales mediante el calculo del indice de Moran local, o mediante el promedio observado en el entorno ponderado por la distancia.
 }
 \examples{
 
-# Cargamos la base de datos
+# Cargamos la base de datos y tomamos las primeras 1500 observaciones
 data("resultado", package = "valuate")
+muestra <- resultado[1:1500, ]
 
 # Se define la estimacion de observaciones atipicas a partir de la variable 'vut'
 # La distancia para el calculo es de 50 metros lineales. Esto define la extension del vecindario.
 # El umbral para considerar a una observacion como atipica se define igual a 0.1 (+/- 10\\%)
 # No se realiza el calculo mediante el indice de Moran local.
-eliminar_outliers(df = resultado,
-                  dist = 50,
-                  variable = "vut",
-                  umbral = 0.1,
-                  moran = FALSE)
+depurados <- eliminar_outliers(df = muestra,
+                               dist = 50,
+                               variable = "vut",
+                               umbral = 0.1,
+                               moran = FALSE)
 
-# Si, en cambio, se desea identificar valores atipicos mediante el calculo del indice de Moran local:
-eliminar_outliers(df = resultado,
-                  dist = 50,
-                  variable = "vut",
-                  moran = TRUE)
+# Si, en cambio, se desea identificar valores atipicos mediante
+# el calculo del indice de Moran local:
+depurados_moran <- eliminar_outliers(df = muestra,
+                                     dist = 50,
+                                     variable = "vut",
+                                     moran = TRUE)
 }
 \references{
 Anselin, L. (1995). Local Indicators of Spatial Association - LISA.
