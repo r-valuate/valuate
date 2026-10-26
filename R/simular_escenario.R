@@ -14,7 +14,7 @@ simular_escenario <- function(modelo, independientes, original){
   pred = raster::stack(independientes)
   simulacion = terra::interpolate(terra::rast(pred), qrf, na.rm = TRUE, wopt=list(steps=80))
   terra::writeRaster(simulacion, "simulacion.tif", overwrite = TRUE)
-  original <- terra::rast("~/Documentos/Consultorias/BID/test/entrenar_modelo/vut.tif")
+  original <- terra::rast(original)
   names(original) <- "original"
   names(simulacion) <- "simulacion"
   original = round(original, 0)

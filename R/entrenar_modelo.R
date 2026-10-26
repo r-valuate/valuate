@@ -36,6 +36,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # A continuacion se presenta un ejemplo para la Ciudad de Medellin (Colombia), con solo 500 datos.
 #' data("datos", package = "valuate")
 #'
@@ -55,6 +56,7 @@
 #'                                    system.file("extdata/entorno_hoteles.tif", package = "valuate")),
 #'                 modelo = "qrf",
 #'                 umbral = 0.3)
+#' }
 entrenar_modelo <- function(df, dependiente, independientes, modelo="qrf", umbral=0.3, eliminar=0.4) {
         df$ID = 1:nrow(df)
         a <- paste0(dependiente, " ~ ", paste(trimws(basename(independientes)),collapse=" + "))

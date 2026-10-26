@@ -12,9 +12,11 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' original = terra::rast(system.file("extdata/edificaciones.tif", package = "valuate"))
 #' area_de_estudio <- sf::st_read(system.file("extdata/area.gpkg", package = "valuate"))
 #' calcular_raster(original, area_de_estudio, dim = 50, entorno = 100, "prueba_raster")
+#' }
 calcular_raster <- function(raster, area, dim, entorno=0, nombre){
         raster = terra::project(raster, "epsg:3857")
         raster = terra::crop(raster, sf::st_transform(area, 3857))
@@ -31,5 +33,6 @@ calcular_raster <- function(raster, area, dim, entorno=0, nombre){
         a = raster::resample(raster::raster(raster), raster::raster(r), method='bilinear')
         terra::plot(a, col = viridis::plasma(100), main = paste0("Variable: ", nombre))
         terra::writeRaster(a, paste0(nombre, ".tif"), overwrite = TRUE)
+        assign(nombre, terra::rast(paste0(nombre, ".tif")), envir = globalenv())
         message(paste0("El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre ", nombre, ".tif. En el environment se ha creado el raster '", nombre, "'."))
 }

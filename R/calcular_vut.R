@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # Cargamos los datos correspondientes a una muestra de 1000 terrenos.
 #' data("terrenos", package = "valuate")
 #'
@@ -29,6 +30,7 @@
 #'                                 "situacion_juridica" = "Con Escritura"),
 #'              dependiente = "valor_m2",
 #'              dist = 500)
+#' }
 calcular_vut <- function(df, index, dependiente, independientes, dist) {
   datos = df
   if ("media" %in% independientes) {val = "media"} else (val = "mediana")
@@ -64,6 +66,7 @@ calcular_vut <- function(df, index, dependiente, independientes, dist) {
   lm <- suppressMessages(spdep::lm.LMtests(ols, lw, test = c("RLMerr", "RLMlag", "SARMA"), zero.policy = TRUE))
   if (min(lm$SARMA$p.value, lm$RLMerr$p.value, lm$RLMlag$p.value) > 0.05) {
     print("No corresponde realizar correcciones por dependencia espacial, se procede a aplicar el modelo estimado por minimos cuadrados ordinarios.")
+    sac <- NULL
   } else if (lm$SARMA$p.value <= 0.05) {
     message("Se procedera a realizar correcciones por dependencia espacial aplicando un modelo SARMA.")
     message("Este proceso puede demorar varios minutos, dependiendo de la cantidad de observaciones en la muestra.")
@@ -75,7 +78,15 @@ calcular_vut <- function(df, index, dependiente, independientes, dist) {
     message("Se procedera a realizar correcciones por dependencia espacial aplicando un modelo de rezago del ERROR espacial.")
     sac <- spatialreg::errorsarlm(ols, data = df, listw = lw, zero.policy = T, na.action = na.omit)
   }
-  if (sac$type %in% c("sac", "lag")) {
+  if (is.null(sac)) {
+    coeficientes <- summary(ols)$coefficients
+    impactos <- data.frame(Variable = rownames(coeficientes),
+                           `p-valor` = coeficientes[, "Pr(>|t|)"],
+                           Efecto = coeficientes[, "Estimate"],
+                           check.names = FALSE)
+    impactos <- impactos[impactos$Variable != "(Intercept)" & impactos$`p-valor` < 0.1, ]
+    row.names(impactos) <- NULL
+  } else if (sac$type %in% c("sac", "lag")) {
     impactos <- spatialreg::impacts(sac, listw = lw)
     aux <- as.data.frame(summary(sac)$Coef) |>
       dplyr::mutate(Variable = rownames(as.data.frame(summary(sac)$Coef))) |>

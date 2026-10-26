@@ -36,6 +36,7 @@
 #'                   variable = "vut",
 #'                   moran = TRUE)
 eliminar_outliers <- function(df, dist, variable, umbral, moran) {
+  df = sf::st_as_sf(df)
   df = subset(df, is.na(df[[variable]]) == FALSE)
   cord <- sf::st_coordinates(df)
   d <- suppressWarnings(spdep::dnearneigh(cord, 0, dist))
@@ -49,6 +50,7 @@ eliminar_outliers <- function(df, dist, variable, umbral, moran) {
           print(paste0("Se eliminaron ", nrow(subset(df, df$drop == "drop")), " observaciones espacialmente atipicas calculadas mediante el indice de Moran local. Se ha creado un objeto en el environment llamado 'depurados' que contiene la base de datos original sin los outliers."))
           df = subset(df, drop == "no drop")
           df$drop = NULL
+          assign("depurados", df, envir=globalenv())
   }
   else {
           w = spdep::listw2mat(lw)
@@ -56,7 +58,7 @@ eliminar_outliers <- function(df, dist, variable, umbral, moran) {
                            ifelse(df[[variable]] / t(df[[variable]] %*% t(w)) > (1 + umbral) |
                              df[[variable]] / t(df[[variable]] %*% t(w)) < (1 - umbral), "drop", "no drop"))
           table(df$drop)
-          print(paste0("Se eliminaron ", nrow(subset(df, df$drop == "drop")), " observaciones espacialmente atipicas calculadas mediante el indice de Moran local. Se ha creado un objeto en el environment llamado 'depurados' que contiene la base de datos original sin los outliers."))
+          print(paste0("Se eliminaron ", nrow(subset(df, df$drop == "drop")), " observaciones espacialmente atipicas calculadas mediante el promedio ponderado del entorno. Se ha creado un objeto en el environment llamado 'depurados' que contiene la base de datos original sin los outliers."))
           df = subset(df, drop == "no drop")
           df$drop = NULL
           assign("depurados", df, envir=globalenv())
