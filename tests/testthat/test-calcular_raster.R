@@ -23,14 +23,12 @@ test_that("calcular_raster genera un .tif con la resolucion y el CRS pedidos", {
   nombre <- "test_calcular_raster"
 
   expect_message(
-    calcular_raster(datos$original, datos$area, dim = 100, entorno = 0, nombre = nombre),
+    resultado <- calcular_raster(datos$original, datos$area, dim = 100, entorno = 0, nombre = nombre),
     "El proceso de calculo ha finalizado"
   )
   expect_true(file.exists(paste0(nombre, ".tif")))
-  expect_true(exists(nombre, envir = globalenv()))
-  expect_s4_class(get(nombre, envir = globalenv()), "SpatRaster")
-
-  resultado <- terra::rast(paste0(nombre, ".tif"))
+  expect_s4_class(resultado, "SpatRaster")
+  expect_equal(names(resultado), nombre)
   expect_equal(terra::res(resultado), c(100, 100))
   expect_true(grepl("merc", terra::crs(resultado, proj = TRUE)))
   # Los valores originales estan entre 0 y 1, el remuestreo debe respetarlo
@@ -39,7 +37,6 @@ test_that("calcular_raster genera un .tif con la resolucion y el CRS pedidos", {
   expect_lte(rango[2, 1], 1)
 
   unlink(paste0(nombre, ".tif"))
-  rm(list = nombre, envir = globalenv())
 })
 
 test_that("calcular_raster con entorno > 0 suaviza los valores", {
@@ -48,17 +45,16 @@ test_that("calcular_raster con entorno > 0 suaviza los valores", {
   datos <- crear_datos_raster()
 
   suppressMessages({
-    calcular_raster(datos$original, datos$area, dim = 100, entorno = 0, nombre = "test_sin_entorno")
-    calcular_raster(datos$original, datos$area, dim = 100, entorno = 200, nombre = "test_con_entorno")
+    r_sin <- calcular_raster(datos$original, datos$area, dim = 100, entorno = 0, nombre = "test_sin_entorno")
+    r_con <- calcular_raster(datos$original, datos$area, dim = 100, entorno = 200, nombre = "test_con_entorno")
   })
 
-  sin_entorno <- terra::values(terra::rast("test_sin_entorno.tif"), na.rm = TRUE)
-  con_entorno <- terra::values(terra::rast("test_con_entorno.tif"), na.rm = TRUE)
+  sin_entorno <- terra::values(r_sin, na.rm = TRUE)
+  con_entorno <- terra::values(r_con, na.rm = TRUE)
 
   expect_gt(length(con_entorno), 0)
   # El promedio movil reduce la variabilidad de un raster aleatorio
   expect_lt(stats::sd(con_entorno), stats::sd(sin_entorno))
 
   unlink(c("test_sin_entorno.tif", "test_con_entorno.tif"))
-  rm("test_sin_entorno", "test_con_entorno", envir = globalenv())
 })

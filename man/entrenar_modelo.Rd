@@ -27,6 +27,8 @@ entrenar_modelo(
 \item{eliminar}{Valor que define el nivel de error a partir del cual se depurara la muestra, siempre que el error general de estimacion se encuentre por encima del definido por el parametro 'umbral'.}
 }
 \value{
+Una lista (devuelta de forma invisible) con cuatro elementos: \code{prediccion}, un objeto 'SpatRaster' con la prediccion espacial; \code{modelo}, el modelo entrenado; \code{utilizados}, los datos que cumplieron con el umbral de error; y \code{eliminados}, los datos descartados por errores altos. Ademas, la prediccion y el modelo se guardan en el directorio de trabajo con los nombres 'vut.tif' y 'modelo.rda'.
+
 Esta funcion implementa un flujo completo de entrenamiento, evaluacion y ajuste de un modelo supervisado para la estimacion de una variable dependiente a partir de un conjunto de variables independientes en formato raster. Especificamente, esta disenada para trabajar con datos espaciales almacenados en un dataframe con geometria de tipo 'POINT', usando herramientas de las librerias 'sf' y 'terra'.
 El proceso se desarrolla en los siguientes pasos principales:
   \enumerate{
@@ -34,7 +36,7 @@ El proceso se desarrolla en los siguientes pasos principales:
     \item{Configuracion del modelo:} Se define un modelo a traves de la libreria 'caret', con soporte para una amplia variedad de algoritmos. El modelo predeterminado es Quantile Regression Forest (QRF), aunque se pueden especificar otros metodos soportados por 'caret'.
     \item{Entrenamiento iterativo:} La funcion utiliza validacion cruzada de 10 particiones para evaluar el error medio absoluto porcentual (MAPE) fuera de la muestra. Si el MAPE promedio supera el umbral especificado, se eliminan observaciones cuyo MAPE individual sea igual o superior al 40\%, y el modelo se entrena nuevamente con los datos restantes. Este proceso se repite hasta que el MAPE promedio cumpla con el umbral definido.
     \item{Generacion de prediccion espacial:} Una vez finalizado el entrenamiento, el modelo entrenado se utiliza para interpolar las predicciones sobre los rasters de entrada, generando un nuevo raster de salida que se guarda en el directorio de trabajo con el nombre 'vut.tif'.
-    \item{Salida de datos:} La funcion genera dos conjuntos de datos en el entorno global: \code{datos_utilizados} (datos que cumplieron con el umbral de error) y \code{datos_eliminados} (datos descartados por errores altos).}
+    \item{Salida de datos:} La funcion devuelve los datos que cumplieron con el umbral de error (\code{utilizados}) y los descartados por errores altos (\code{eliminados}).}
 La funcion esta optimizada para aplicaciones que requieren analisis espaciales precisos y esta disenada para integrarse en flujos de trabajo geoespaciales complejos. Ademas, emplea paralelizacion para acelerar el proceso de entrenamiento en maquinas con multiples nucleos.
 El diseno de esta funcion esta orientado a contextos donde es crucial garantizar una alta precision en la estimacion, especialmente en aplicaciones que involucran modelizacion espacial o analisis urbano. Ademas, facilita la integracion con flujos de trabajo basados en datos geoespaciales mediante las librerias 'sf' y 'raster'.
 }
@@ -45,23 +47,18 @@ Esta funcion permite entrenar modelos y cuantificar su error en la prediccion de
 \dontrun{
 # A continuacion se presenta un ejemplo para la Ciudad de Medellin (Colombia), con solo 500 datos.
 data("datos", package = "valuate")
+rasters <- c("dist_basura.tif", "dist_industria.tif", "dist_plazas_parques.tif",
+             "dist_tren.tif", "dist_vias_autopista.tif", "dist_vias_prim.tif",
+             "dist_vias_sec.tif", "entorno_altura.tif", "entorno_plazas_parques.tif",
+             "entorno_comercios.tif", "entorno_edificaciones.tif", "entorno_hoteles.tif")
+modelo <- entrenar_modelo(df = dat,
+                          dependiente = "vut",
+                          independientes = descargar_datos(rasters),
+                          modelo = "qrf",
+                          umbral = 0.3)
 
-entrenar_modelo(df = dat,
-                dependiente = "vut",
-                independientes = c(system.file("extdata/dist_basura.tif", package = "valuate"),
-                                   system.file("extdata/dist_industria.tif", package = "valuate"),
-                                   system.file("extdata/dist_plazas_parques.tif", package = "valuate"),
-                                   system.file("extdata/dist_tren.tif", package = "valuate"),
-                                   system.file("extdata/dist_vias_autopista.tif", package = "valuate"),
-                                   system.file("extdata/dist_vias_prim.tif", package = "valuate"),
-                                   system.file("extdata/dist_vias_sec.tif", package = "valuate"),
-                                   system.file("extdata/entorno_altura.tif", package = "valuate"),
-                                   system.file("extdata/entorno_plazas_parques.tif", package = "valuate"),
-                                   system.file("extdata/entorno_comercios.tif", package = "valuate"),
-                                   system.file("extdata/entorno_edificaciones.tif", package = "valuate"),
-                                   system.file("extdata/entorno_hoteles.tif", package = "valuate")),
-                modelo = "qrf",
-                umbral = 0.3)
+modelo$prediccion
+modelo$utilizados
 }
 }
 \references{

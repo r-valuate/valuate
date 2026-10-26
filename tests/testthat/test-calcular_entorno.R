@@ -16,15 +16,15 @@ test_that("calcular_entorno genera un raster con CRS correcto", {
   dim <- 100
   ext <- 200
   nombre <- "test_entorno"
+  old <- setwd(tempdir())
+  on.exit(setwd(old), add = TRUE)
 
-  # Ejecutar la función y verificar que genera la salida esperada
-  expect_output(calcular_entorno(area, objeto, dim, ext, nombre), "El proceso de calculo ha finalizado, y el raster resultante fue guardado en el directorio de trabajo con el nombre test_entorno.tif. En el environment se ha creado el raster 'test_entorno'.")
+  # Ejecutar la función y verificar que devuelve el raster
+  expect_message(test_raster <- calcular_entorno(area, objeto, dim, ext, nombre),
+                 "El proceso de calculo ha finalizado")
 
-  # Verificar que la variable se creó en el entorno global
-  expect_true(exists(nombre, envir = globalenv()))
-
-  # Obtener el raster generado
-  test_raster <- get(nombre, envir = globalenv())
+  # La funcion no debe crear objetos en el entorno global
+  expect_false(exists(nombre, envir = globalenv(), inherits = FALSE))
 
   # Verificar que el objeto generado es un SpatRaster
   expect_s4_class(test_raster, "SpatRaster")
@@ -39,7 +39,6 @@ test_that("calcular_entorno genera un raster con CRS correcto", {
 
   # Limpiar archivos de prueba
   unlink(paste0(nombre, ".tif"))
-  rm(list = nombre, envir = globalenv())
 })
 
 test_that("calcular_entorno maneja geometrías no válidas", {

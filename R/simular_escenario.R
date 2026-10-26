@@ -3,11 +3,11 @@
 #'
 #' @author Juan Pablo Carranza
 #'
-#' @param modelo Archivo .rda guardado en el directorio de trabajo por la funcion estimar_modelo().
-#' @param independientes Vector con los nombres de las variables independientes. Debe tener los mismos nombre que los utilizados en la funcion estimar_modelo(), solo que admite que los rasters tengan una distribucion espacial diferente, incorporando modificaciones simuladas a la nueva prediccion.
-#' @param original Resultado del modelo original. Es un archivo .tif guardado en el directorio de trabajo por la funcion estimar_modelo().
+#' @param modelo Archivo .rda guardado en el directorio de trabajo por la funcion entrenar_modelo().
+#' @param independientes Vector con los nombres de las variables independientes. Debe tener los mismos nombre que los utilizados en la funcion entrenar_modelo(), solo que admite que los rasters tengan una distribucion espacial diferente, incorporando modificaciones simuladas a la nueva prediccion.
+#' @param original Resultado del modelo original. Es un archivo .tif guardado en el directorio de trabajo por la funcion entrenar_modelo().
 #'
-#' @return La funcion devuelve un raster que informa sobre el impacto en la variable dependiente de las simulaciones realizadas en las variables independientes. Permite estimar la magnitud y el alcance territorial de las modificaciones simuladas sobre la variable de estudio.
+#' @return Un objeto 'SpatRaster' (libreria 'terra'), que tambien se guarda en el directorio de trabajo con el nombre 'impacto.tif'. La funcion devuelve un raster que informa sobre el impacto en la variable dependiente de las simulaciones realizadas en las variables independientes. Permite estimar la magnitud y el alcance territorial de las modificaciones simuladas sobre la variable de estudio.
 #' @export
 simular_escenario <- function(modelo, independientes, original){
   load(modelo)
@@ -26,8 +26,9 @@ simular_escenario <- function(modelo, independientes, original){
   resultado <- terra::interpIDW(terra::rast(pred), terra::vect(sf::st_as_sf(a)), field = "original",
                                 radius=200, power=3, smooth=10, maxPoints=20, minPoints = 5,
                                 fill = NA)
-  resultado <- raster::trim(resultado)
+  resultado <- terra::trim(resultado)
   terra::plot(resultado, smooth = TRUE)
   terra::writeRaster(resultado, "impacto.tif", overwrite=TRUE)
   message("En el directorio de trabajo se ha guardado un raster con el impacto de la simulacion, con el nombre 'impacto.tif'.")
+  return(resultado)
 }
