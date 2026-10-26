@@ -1,15 +1,26 @@
 Package: valuate
 Type: Package
-Title: Caja de herramientas para la realización de estudios territoriales
+Title: Caja de herramientas para la realización de valuaciones masivas automatizadas
 Version: 0.1.0
 Authors@R: c(person(given = "Juan Pablo", family = "Carranza", email = "juan.carranza@unc.edu.ar",
                   role = c("aut", "cre", "ctb")))
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Provee funciones para facilitar el proceso de valuación masiva
+    de inmuebles, siguiendo el desarrollo de Eguino y Carranza (2025)
+    <doi:10.18235/0013669>. Permite crear variables territoriales que informan
+    sobre la distancia a diferentes hitos o las características del entorno,
+    homogeneizar valores para descontar los efectos de características
+    intrínsecas de las observaciones, identificar observaciones espacialmente
+    atípicas, entrenar modelos de aprendizaje computacional estimando su error
+    fuera de la muestra y simular escenarios para conocer la magnitud y
+    extensión geográfica de diferentes externalidades sobre el precio de los
+    inmuebles. Puede ser también de utilidad para la predicción de la
+    distribución espacial de cualquier tipo de fenómeno geográfico.
+URL: https://github.com/r-valuate/valuate, https://r-valuate.r-universe.dev/valuate
+BugReports: https://github.com/r-valuate/valuate/issues
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    R (>= 3.5)
+    R (>= 4.1.0)
 Imports:
     dplyr,
     ggplot2,
