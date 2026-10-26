@@ -70,14 +70,19 @@ calcular_vut <- function(df, index, dependiente, independientes, dist) {
   idlist <- lapply(dlist, function(x) 1/x)
   lw <- spdep::nb2listw(d, glist=idlist ,style="W" , zero.policy = TRUE)
   lm <- suppressMessages(spdep::lm.LMtests(ols, lw, test = c("RLMerr", "RLMlag", "SARMA"), zero.policy = TRUE))
-  if (min(lm$SARMA$p.value, lm$RLMerr$p.value, lm$RLMlag$p.value) > 0.05) {
+  # Desde spdep 1.3-2 los tests robustos se llaman "adjRSerr" y "adjRSlag"
+  p_sarma <- lm$SARMA$p.value
+  # (antes "RLMerr" y "RLMlag"); se toma el que exista
+  p_err <- c(lm$adjRSerr$p.value, lm$RLMerr$p.value)[1]
+  p_lag <- c(lm$adjRSlag$p.value, lm$RLMlag$p.value)[1]
+  if (min(p_sarma, p_err, p_lag) > 0.05) {
     print("No corresponde realizar correcciones por dependencia espacial, se procede a aplicar el modelo estimado por minimos cuadrados ordinarios.")
     sac <- NULL
-  } else if (lm$SARMA$p.value <= 0.05) {
+  } else if (p_sarma <= 0.05) {
     message("Se procedera a realizar correcciones por dependencia espacial aplicando un modelo SARMA.")
     message("Este proceso puede demorar varios minutos, dependiendo de la cantidad de observaciones en la muestra.")
     sac <- spatialreg::sacsarlm(ols, data = df, listw = lw, zero.policy = T, na.action = na.omit)
-  } else if (which.min(c(lm$RLMlag$p.value, lm$RLMerr$p.value)) == 1) {
+  } else if (which.min(c(p_lag, p_err)) == 1) {
     message("Se procedera a realizar correcciones por dependencia espacial aplicando un modelo de rezago espacial LAG.")
     sac <- spatialreg::lagsarlm(ols, data = df, listw = lw, zero.policy = T, na.action = na.omit)
   } else {

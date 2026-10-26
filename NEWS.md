@@ -12,6 +12,11 @@
   quedan observaciones para eliminar, el proceso se detiene con un mensaje en
   lugar de repetirse indefinidamente. El mensaje informa correctamente la
   cantidad de observaciones eliminadas en cada vuelta.
+* `calcular_vut()`: con versiones recientes de `spdep` (1.3-2 o posteriores),
+  que renombraron los tests robustos a `adjRSerr` y `adjRSlag`, la función
+  nunca elegía los modelos LAG ni de error espacial: cuando el test SARMA no
+  era significativo aplicaba siempre mínimos cuadrados ordinarios. Ahora
+  funciona con ambas versiones de `spdep`.
 
 ## Otros cambios
 
