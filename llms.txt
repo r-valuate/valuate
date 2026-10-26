@@ -1,7 +1,5 @@
 # Valuate
 
-![](reference/figures/logo.png)
-
 Este paquete provee una serie de funciones orientadas a facilitar el
 proceso de valuación de inmuebles, siguiendo el desarrollo de [Eguino &
 Carranza
