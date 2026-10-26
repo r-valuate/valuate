@@ -24,6 +24,8 @@ library(valuate)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![r-universe](https://r-valuate.r-universe.dev/valuate/badges/version)](https://r-valuate.r-universe.dev/valuate)
+[![r-universe checks](https://r-valuate.r-universe.dev/valuate/badges/checks)](https://r-valuate.r-universe.dev/valuate)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 <img src="man/figures/logo.png" align="right" width="120" style="margin-top: -50px; z-index: 1;" />
